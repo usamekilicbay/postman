@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6282fb12dab13834dac826681a13662f, type: 3}
+  m_Name: Common Enemy Config
+  m_EditorClassIdentifier: 
+  LightInsultDamage: 10
+  HeavyInsultDamage: 15
+  HonorRecoverAmount: 7
+  StaminaRecoverAmount: 20
+  LightInsultRequiredStamina: 10
+  HeavyInsultRequiredStamina: 30
+  CriticalDamageChance: 10
+  IgnoreChance: 40
+  MaxStamina: 100
+  MaxHonor: 80
+  LightInsultText: You could get a real job you know...
+  HeavyInsultText: Even though I'm a dog, I'm living better than you haha!
