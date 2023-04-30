@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 public enum Rarity
 {
@@ -31,9 +32,29 @@ public class Card : MonoBehaviour
     private ItemCardConfig _itemCardConfig;
 
     private bool _isBackSideShown;
+    private Vector3 _defaultScale;
+
+    #region Dependency Injection
 
     private DeckManager _deckManager;
     private InventoryManager _inventoryManager;
+    private CurrencyManager _currencyManager;
+
+    public void Construct(DiContainer diContainer)
+    {
+        _deckManager = diContainer.Resolve<DeckManager>();
+        _inventoryManager = diContainer.Resolve<InventoryManager>();
+        _currencyManager = diContainer.Resolve<CurrencyManager>();
+    }
+
+    #endregion
+
+    private void Awake()
+    {
+        _defaultScale = transform.localScale;
+        transform.localScale = _defaultScale * 0.7f;
+        transform.DOScale(_defaultScale, 0.5f);
+    }
 
     private void OnMouseDrag()
     {
@@ -43,49 +64,64 @@ public class Card : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            transform.DORotate(transform.rotation.eulerAngles + Vector3.up * 90, 0.5f)
-                .OnStepComplete(() =>
-                {
-                    if (_isBackSideShown)
-                    {
-                        frontSide.SetActive(true);
-                        backSide.SetActive(false);
-                        _isBackSideShown = false;
-                    }
-                    else
-                    {
-                        frontSide.SetActive(false);
-                        backSide.SetActive(true);
-                        _isBackSideShown = true;
-                    }
-
-                    transform.DORotate(transform.rotation.eulerAngles + Vector3.up * 90, 0.5f)
-                    .OnComplete(() => transform.DORotate(Vector3.zero, 0f));
-                });
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            transform.DOMoveX(5f, 0.5f)
-                .OnComplete(CollectCard);
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            transform.DOMoveX(-5f, 0.5f)
-                .OnComplete(PassCard);
-        }
+            FlipCard();
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            CollectCard();
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            PassCard();
     }
 
-    private void CollectCard()
+    private void FlipCard()
     {
+        transform.DORotate(transform.rotation.eulerAngles + Vector3.up * 90, 0.5f)
+            .OnComplete(UpdateShownSide);
+    }
+
+    private void UpdateShownSide()
+    {
+        if (_isBackSideShown)
+        {
+            frontSide.SetActive(true);
+            backSide.SetActive(false);
+            _isBackSideShown = false;
+        }
+        else
+        {
+            frontSide.SetActive(false);
+            backSide.SetActive(true);
+            _isBackSideShown = true;
+        }
+
+        transform.DORotate(transform.rotation.eulerAngles + Vector3.up * 90, 0.5f);
+    }
+
+    private async void CollectCard()
+    {
+        if (_currencyManager.BuyItem(_itemCardConfig.Price))
+        {
+            Debug.Log("Can not be buyed");
+            return;
+        }
+
         Debug.Log("Collected");
-        _inventoryManager.CollectItem(_itemCardConfig);
+
         _deckManager.SpawnCard();
+
+        await transform.DOMoveX(5f, 0.5f)
+             .AsyncWaitForKill();
+
+        _inventoryManager.CollectItem(_itemCardConfig);
         Destroy(gameObject);
     }
 
-    private void PassCard()
+    private async void PassCard()
     {
         Debug.Log("Passed");
-        // TODO: Spawn Next Card
+        _deckManager.SpawnCard();
+
+        await transform.DOMoveX(-5f, 0.5f)
+             .AsyncWaitForKill();
+
         Destroy(gameObject);
     }
 
@@ -109,5 +145,9 @@ public class Card : MonoBehaviour
         priceText.SetText($"${config.Price}");
         rarityText.SetText(Enum.GetName(typeof(Rarity), config.Rarity));
         weightText.SetText(config.Weight.ToString("F1"));
+    }
+
+    public class Factory : PlaceholderFactory<DiContainer, Card>
+    {
     }
 }
