@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 public class CurrencyManager : MonoBehaviour
 {
@@ -6,8 +7,12 @@ public class CurrencyManager : MonoBehaviour
 
     public static int CurrentMoney {get;private set;}
 
-    private void Awake()
+    private UIGameScreen _uiGameScreen;
+
+    [Inject]
+    public void Construct(UIGameScreen uiGameScreen)
     {
+        _uiGameScreen = uiGameScreen;
         CurrentMoney = StartMoney;
     }
 
@@ -20,6 +25,7 @@ public class CurrencyManager : MonoBehaviour
         }
 
         CurrentMoney -= amount;
+        _uiGameScreen.UpdateMoneyText(CurrentMoney);
         return true;
     }
 }

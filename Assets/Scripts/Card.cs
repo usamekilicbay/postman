@@ -40,20 +40,21 @@ public class Card : MonoBehaviour
     private InventoryManager _inventoryManager;
     private CurrencyManager _currencyManager;
 
-    public void Construct(DiContainer diContainer)
+    [Inject]
+    public void Construct(CardFacade cardFacade)
     {
-        _deckManager = diContainer.Resolve<DeckManager>();
-        _inventoryManager = diContainer.Resolve<InventoryManager>();
-        _currencyManager = diContainer.Resolve<CurrencyManager>();
+        _deckManager = cardFacade.DeckManager;
+        _inventoryManager = cardFacade.InventoryManager;
+        _currencyManager = cardFacade.CurrencyManager;
     }
 
     #endregion
 
+    #region Unity
+
     private void Awake()
     {
-        _defaultScale = transform.localScale;
-        transform.localScale = _defaultScale * 0.7f;
-        transform.DOScale(_defaultScale, 0.5f);
+        Setup();
     }
 
     private void OnMouseDrag()
@@ -69,6 +70,18 @@ public class Card : MonoBehaviour
             CollectCard();
         else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
             PassCard();
+    }
+
+    #endregion
+
+    private void Setup()
+    {
+        frontSide.SetActive(true);
+        backSide.SetActive(false);
+        backSide.transform.rotation = Quaternion.Euler(Vector3.up * 180);
+        _defaultScale = transform.localScale;
+        transform.localScale = _defaultScale * 0.7f;
+        transform.DOScale(_defaultScale, 0.5f);
     }
 
     private void FlipCard()
@@ -97,7 +110,9 @@ public class Card : MonoBehaviour
 
     private async void CollectCard()
     {
-        if (_currencyManager.BuyItem(_itemCardConfig.Price))
+        var isNotEnoughMoney = !_currencyManager.BuyItem(_itemCardConfig.Price);
+
+        if (isNotEnoughMoney)
         {
             Debug.Log("Can not be buyed");
             return;
@@ -147,7 +162,7 @@ public class Card : MonoBehaviour
         weightText.SetText(config.Weight.ToString("F1"));
     }
 
-    public class Factory : PlaceholderFactory<DiContainer, Card>
+    public class Factory : PlaceholderFactory<Card>
     {
     }
 }

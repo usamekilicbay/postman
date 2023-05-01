@@ -28,27 +28,30 @@ public class GameInstaller : MonoInstaller
             .FromComponentInHierarchy()
             .AsSingle();
 
-         Container
-            .BindFactory<DiContainer, Card, Card.Factory>()
-            .FromComponentInNewPrefab(cardPrefab);
-    }
+        Container
+            .Bind<CardFacade>()
+            .AsSingle();
 
-    public void InstallCard(DiContainer subContainer)
-    {
-        subContainer
-           .BindFactory<DiContainer, Card, Card.Factory>()
+        Container
+           .BindFactory<Card, Card.Factory>()
            .FromComponentInNewPrefab(cardPrefab);
-        subContainer
-            .Bind<InventoryManager>()
+
+
+        #region UI
+
+        Container
+            .Bind<UIManagerBase>()
             .FromComponentInHierarchy()
             .AsSingle();
-        subContainer
-             .Bind<CurrencyManager>()
-            .FromComponentInHierarchy()
-            .AsSingle();
-        subContainer
-            .Bind<InventoryManager>()
-            .FromComponentInHierarchy()
-            .AsSingle();
+
+        var screens = FindObjectsOfType<UIScreenBase>(true);
+        foreach (var screen in screens)
+            Container.Bind(screen.GetType()).FromComponentsInHierarchy().AsSingle();
+
+        var dialogs = FindObjectsOfType<UIDialogBase>(true);
+        foreach (var dialog in dialogs)
+            Container.Bind(dialog.GetType()).FromComponentsInHierarchy().AsSingle();
+
+        #endregion
     }
 }

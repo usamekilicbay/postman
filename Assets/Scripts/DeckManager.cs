@@ -17,36 +17,36 @@ public class DeckManager : MonoBehaviour
     private InventoryManager _inventoryManager;
     private Card.Factory _cardFactory;
 
+    private UIGameScreen _uiGameScreen;
+
     [Inject]
     public void Construct(DiContainer diContainer,
-        InventoryManager inventoryManager,
-        Card.Factory cardFactory,
-        Card card)
+        Card.Factory cardFactory)
     {
-        _inventoryManager = inventoryManager;
-        _cardFactory = cardFactory;
         _diContainer = diContainer;
+        _inventoryManager = _diContainer.Resolve<InventoryManager>();
+        _cardFactory = cardFactory;
+        _uiGameScreen = _diContainer.Resolve<UIGameScreen>();
     }
 
     #endregion
 
     private void Awake()
     {
+        _cardCounter = 3;
         SpawnCard();
     }
 
     public void SpawnCard()
     {
-        if (_cardCounter == 10)
+        if (_cardCounter == 0)
             _inventoryManager.CompleteRun();
 
-        var card = _cardFactory.Create(_diContainer);
+        _uiGameScreen.UpdateRemaningCardCountText(_cardCounter);
+        var card = _cardFactory.Create();
         var randomIndex = Random.Range(0, cardConfigs.Count);
         card.SetConfigs(cardConfigs[randomIndex]);
 
-        //var card = Instantiate(cardPrefab, transform)
-        //    .GetComponent<Card>();
-
-        _cardCounter++;
+        _cardCounter--;
     }
 }
