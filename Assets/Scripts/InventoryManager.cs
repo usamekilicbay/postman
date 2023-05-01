@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -10,7 +11,15 @@ public class InventoryManager : MonoBehaviour
     private List<ItemCardConfig> temporaryItems;
     private List<ItemCardConfig> items;
 
-    void Start()
+    private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
+
+    [Inject]
+    public void Construct(UIAuctionPreparationScreen uiAuctionPreparationScreen)
+    {
+        _uiAuctionPreparationScreen = uiAuctionPreparationScreen;
+    }
+
+    private void Start()
     {
         temporaryItems = new List<ItemCardConfig>();
         items = new List<ItemCardConfig>();
@@ -43,5 +52,7 @@ public class InventoryManager : MonoBehaviour
     {
         foreach (var item in temporaryItems)
             items.Add(item);
+
+        _uiAuctionPreparationScreen.AddItemToInventory(items);
     }
 }

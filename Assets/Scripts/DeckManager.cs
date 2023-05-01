@@ -17,6 +17,8 @@ public class DeckManager : MonoBehaviour
     private InventoryManager _inventoryManager;
     private Card.Factory _cardFactory;
 
+    private UIManagerBase _uiManager;
+    private UIHomeScreen _uiHomeScreen;
     private UIGameScreen _uiGameScreen;
 
     [Inject]
@@ -26,6 +28,8 @@ public class DeckManager : MonoBehaviour
         _diContainer = diContainer;
         _inventoryManager = _diContainer.Resolve<InventoryManager>();
         _cardFactory = cardFactory;
+        _uiManager = _diContainer.Resolve<UIManagerBase>();
+        _uiHomeScreen = _diContainer.Resolve<UIHomeScreen>();
         _uiGameScreen = _diContainer.Resolve<UIGameScreen>();
     }
 
@@ -40,7 +44,10 @@ public class DeckManager : MonoBehaviour
     public void SpawnCard()
     {
         if (_cardCounter == 0)
-            _inventoryManager.CompleteRun();
+        {
+            CompleteRun();
+            return;
+        }
 
         _uiGameScreen.UpdateRemaningCardCountText(_cardCounter);
         var card = _cardFactory.Create();
@@ -48,5 +55,11 @@ public class DeckManager : MonoBehaviour
         card.SetConfigs(cardConfigs[randomIndex]);
 
         _cardCounter--;
+    }
+
+    private void CompleteRun()
+    {
+        _inventoryManager.CompleteRun();
+        _uiManager.ShowScreen(_uiHomeScreen);
     }
 }

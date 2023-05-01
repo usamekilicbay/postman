@@ -4,12 +4,12 @@ using Zenject;
 
 public abstract class UIScreenBase : MonoBehaviour
 {
-    protected UIManagerBase _uiManager;
+    protected UIManagerBase uiManager;
 
     [Inject]
     public void Construct(UIManagerBase mainSceneUIManager)
     {
-        _uiManager = mainSceneUIManager;
+        uiManager = mainSceneUIManager;
     }
 
     public virtual Task Show()
