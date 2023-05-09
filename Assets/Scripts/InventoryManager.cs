@@ -10,6 +10,7 @@ public class InventoryManager : MonoBehaviour
 
     private List<ItemCardConfig> temporaryItems;
     private List<ItemCardConfig> items;
+    private List<ItemCardConfig> auctionItems;
 
     private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
 
@@ -23,6 +24,10 @@ public class InventoryManager : MonoBehaviour
     {
         temporaryItems = new List<ItemCardConfig>();
         items = new List<ItemCardConfig>();
+        auctionItems = new List<ItemCardConfig>();
+
+        _uiAuctionPreparationScreen.CreateMainInventorySlots(inventoryConfig.MainInventorySlotCount);
+        _uiAuctionPreparationScreen.CreateAuctionInventorySlots(inventoryConfig.AuctionInventorySlotCount);
     }
 
     public void CollectItem(ItemCardConfig item)
@@ -53,6 +58,18 @@ public class InventoryManager : MonoBehaviour
         foreach (var item in temporaryItems)
             items.Add(item);
 
-        _uiAuctionPreparationScreen.AddItemToInventory(items);
+        _uiAuctionPreparationScreen.LoadItemsToInventory(items);
+    }
+
+    public void MoveItemToMainInventory(ItemCardConfig itemCardConfig)
+    {
+        items.Add(itemCardConfig);
+        auctionItems.Remove(itemCardConfig);
+    }
+
+    public void MoveItemToAuctionInventory(ItemCardConfig itemCardConfig)
+    {
+        auctionItems.Add(itemCardConfig);
+        items.Remove(itemCardConfig);
     }
 }
