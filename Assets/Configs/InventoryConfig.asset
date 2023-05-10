@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a38383b94fed51b43aefd463b1cd64de, type: 3}
   m_Name: InventoryConfig
   m_EditorClassIdentifier: 
-  CarryCapacity: 5
+  CarryCapacity: 500
   ItemDiscardProbability: 90
+  MainInventorySlotCount: 10
+  AuctionInventorySlotCount: 4

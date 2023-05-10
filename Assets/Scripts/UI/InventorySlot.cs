@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class InventorySlot : MonoBehaviour
 {
-    public bool IsEmpty { get; private set; } = true;
+    public bool IsFull { get; private set; }
 
     public void FillSlot()
     {
-        IsEmpty = false;
+        IsFull = true;
+    }
+
+    public void EmptySlot()
+    {
+        IsFull = false;
     }
 }

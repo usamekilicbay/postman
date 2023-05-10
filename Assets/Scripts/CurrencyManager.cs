@@ -3,7 +3,7 @@ using Zenject;
 
 public class CurrencyManager : MonoBehaviour
 {
-    private int StartMoney = 1000;
+    [SerializeField]    private int startMoney = 100000;
 
     public static int CurrentMoney {get;private set;}
 
@@ -13,7 +13,7 @@ public class CurrencyManager : MonoBehaviour
     public void Construct(UIGameScreen uiGameScreen)
     {
         _uiGameScreen = uiGameScreen;
-        CurrentMoney = StartMoney;
+        CurrentMoney = startMoney;
     }
 
     public bool BuyItem(int amount)

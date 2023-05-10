@@ -37,7 +37,7 @@ public class DeckManager : MonoBehaviour
 
     private void Awake()
     {
-        _cardCounter = 3;
+        _cardCounter = 6;
         SpawnCard();
     }
 

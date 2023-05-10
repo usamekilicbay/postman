@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -108,7 +109,7 @@ public class Card : MonoBehaviour
         transform.DORotate(transform.rotation.eulerAngles + Vector3.up * 90, 0.5f);
     }
 
-    private async void CollectCard()
+    private async Task CollectCard()
     {
         var isNotEnoughMoney = !_currencyManager.BuyItem(_itemCardConfig.Price);
 
@@ -120,12 +121,12 @@ public class Card : MonoBehaviour
 
         Debug.Log("Collected");
 
+        _inventoryManager.CollectItem(_itemCardConfig);
         _deckManager.SpawnCard();
 
         await transform.DOMoveX(5f, 0.5f)
              .AsyncWaitForKill();
 
-        _inventoryManager.CollectItem(_itemCardConfig);
         Destroy(gameObject);
     }
 

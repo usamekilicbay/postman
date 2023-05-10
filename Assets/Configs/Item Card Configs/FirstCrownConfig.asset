@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca09445b98850eb4095c9f3b3b45e818, type: 3}
-  m_Name: BlackStarConfig
+  m_Name: FirstCrownConfig
   m_EditorClassIdentifier: 
-  IdInfo: 4f2adc15-0195-47bd-b984-7f408491f5dc
-  Artwork: {fileID: 21300000, guid: c22340e383b54c44196cb7765328e79d, type: 3}
-  Name: Black Star
-  Description: Forgotten Clan Member
-  Price: 442
-  Rarity: 0
-  Weight: 2
+  IdInfo: 
+  Artwork: {fileID: 21300000, guid: 75b5303eb4efdec4ea4b3b5b4fe22155, type: 3}
+  Name: First Crown
+  Description: Fallen King's Crown
+  Price: 678
+  Rarity: 3
+  Weight: 1
   _hasBeenInitialised: 1

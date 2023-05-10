@@ -61,15 +61,9 @@ public class InventoryManager : MonoBehaviour
         _uiAuctionPreparationScreen.LoadItemsToInventory(items);
     }
 
-    public void MoveItemToMainInventory(ItemCardConfig itemCardConfig)
+    public void UpdateInventories(List<ItemCardConfig> items, List<ItemCardConfig> auctionItems)
     {
-        items.Add(itemCardConfig);
-        auctionItems.Remove(itemCardConfig);
-    }
-
-    public void MoveItemToAuctionInventory(ItemCardConfig itemCardConfig)
-    {
-        auctionItems.Add(itemCardConfig);
-        items.Remove(itemCardConfig);
+        this.items = items;
+        this.auctionItems = auctionItems;
     }
 }

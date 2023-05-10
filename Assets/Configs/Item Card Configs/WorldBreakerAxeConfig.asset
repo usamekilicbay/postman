@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca09445b98850eb4095c9f3b3b45e818, type: 3}
-  m_Name: FirstRoseConfig
+  m_Name: WorldBreakerAxeConfig
   m_EditorClassIdentifier: 
-  IdInfo: 2c5cb2d9-0503-4fc1-bf2f-d6311600f48c
-  Artwork: {fileID: 21300000, guid: c22340e383b54c44196cb7765328e79d, type: 3}
-  Name: First Rose
-  Description: Lady's first rose
-  Price: 678
-  Rarity: 3
-  Weight: 1
+  IdInfo: 
+  Artwork: {fileID: 21300000, guid: 40a8ad6fc063a504986bd3dc5b54eee3, type: 3}
+  Name: World Breaker Axe
+  Description: Mythic Axe of Destruction
+  Price: 442
+  Rarity: 0
+  Weight: 2
   _hasBeenInitialised: 1
