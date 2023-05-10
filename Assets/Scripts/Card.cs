@@ -119,6 +119,8 @@ public class Card : MonoBehaviour
             return;
         }
 
+        // TODO: Should I check "IsInventoryFull" here?
+
         Debug.Log("Collected");
 
         _inventoryManager.CollectItem(_itemCardConfig);

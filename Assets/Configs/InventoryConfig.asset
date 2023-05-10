@@ -16,3 +16,4 @@ MonoBehaviour:
   ItemDiscardProbability: 90
   MainInventorySlotCount: 10
   AuctionInventorySlotCount: 4
+  TemporaryInventorySlotCount: 4

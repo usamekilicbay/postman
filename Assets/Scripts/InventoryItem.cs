@@ -19,10 +19,13 @@ public class InventoryItem : MonoBehaviour
     public ItemCardConfig ItemConfig { get; private set; }
 
     private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
+    private UIGameScreen _uiGameScreen;
 
     [Inject]
-    public void Construct(UIAuctionPreparationScreen uiAuctionPreparationScreen)
+    public void Construct(UIGameScreen uiGameScreen,
+        UIAuctionPreparationScreen uiAuctionPreparationScreen)
     {
+        _uiGameScreen = uiGameScreen;
         _uiAuctionPreparationScreen = uiAuctionPreparationScreen;
     }
 
@@ -48,6 +51,21 @@ public class InventoryItem : MonoBehaviour
                 _uiAuctionPreparationScreen.MoveItemToMainInventory(this);
                 break;
             case PresentInventory.Temp:
+                break;
+        }
+    }
+
+    public void DiscardItem()
+    {
+        switch (PresentInventory)
+        {
+            case PresentInventory.Main:
+                _uiAuctionPreparationScreen.DiscardItemFromInventory(this);
+                break;
+            case PresentInventory.Auction:
+                break;
+            case PresentInventory.Temp:
+                _uiGameScreen.DiscardItemFromInventory(this);
                 break;
         }
     }

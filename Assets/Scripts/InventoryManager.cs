@@ -8,62 +8,109 @@ public class InventoryManager : MonoBehaviour
 
     private float _burden;
 
-    private List<ItemCardConfig> temporaryItems;
-    private List<ItemCardConfig> items;
-    private List<ItemCardConfig> auctionItems;
+    private List<ItemCardConfig> _temporaryItems;
+    private List<ItemCardConfig> _items;
+    private List<ItemCardConfig> _auctionItems;
 
+    private UIGameScreen _uiGameScreen;
     private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
 
     [Inject]
-    public void Construct(UIAuctionPreparationScreen uiAuctionPreparationScreen)
+    public void Construct(UIGameScreen uiGameScreen,
+        UIAuctionPreparationScreen uiAuctionPreparationScreen)
     {
+        _uiGameScreen = uiGameScreen;
         _uiAuctionPreparationScreen = uiAuctionPreparationScreen;
     }
 
     private void Start()
     {
-        temporaryItems = new List<ItemCardConfig>();
-        items = new List<ItemCardConfig>();
-        auctionItems = new List<ItemCardConfig>();
+        _temporaryItems = new List<ItemCardConfig>();
+        _items = new List<ItemCardConfig>();
+        _auctionItems = new List<ItemCardConfig>();
 
+        _uiGameScreen.CreateInventorySlots(inventoryConfig.TemporaryInventorySlotCount);
         _uiAuctionPreparationScreen.CreateMainInventorySlots(inventoryConfig.MainInventorySlotCount);
         _uiAuctionPreparationScreen.CreateAuctionInventorySlots(inventoryConfig.AuctionInventorySlotCount);
     }
 
-    public void CollectItem(ItemCardConfig item)
+    public bool CollectItem(ItemCardConfig item)
     {
-        if (_burden >= inventoryConfig.CarryCapacity)
+        //if (_burden >= inventoryConfig.CarryCapacity
+        //    && Random.Range(0f, 1f) < inventoryConfig.ItemDiscardProbability)
+        //{
+        //    var selectedItem = ScriptableObject.CreateInstance<ItemCardConfig>();
+
+        //    do
+        //    {
+        //        var randomIndex = Random.Range(0, temporaryItems.Count);
+        //        selectedItem = temporaryItems[randomIndex];
+
+        //    } while (_burden - selectedItem.Weight + item.Weight <= inventoryConfig.CarryCapacity);
+
+        //    temporaryItems.Remove(selectedItem);
+
+        //    return false;
+        //}
+
+        if (_temporaryItems.Count == inventoryConfig.TemporaryInventorySlotCount)
         {
-            if (Random.Range(0f, 1f) > inventoryConfig.ItemDiscardProbability)
-                return;
+            Debug.Log("Temporary inventory is full, new item can not be collected!");
 
-            var selectedItem = ScriptableObject.CreateInstance<ItemCardConfig>();
-
-            do
-            {
-                var randomIndex = Random.Range(0, temporaryItems.Count);
-                selectedItem = temporaryItems[randomIndex];
-
-            } while (_burden - selectedItem.Weight + item.Weight <= inventoryConfig.CarryCapacity);
-
-            temporaryItems.Remove(selectedItem);
+            return false;
         }
 
-        temporaryItems.Add(item);
+        _temporaryItems.Add(item);
+        _uiGameScreen.AddItemToInventory(item);
         _burden += item.Weight;
+        return true;
     }
 
     public void CompleteRun()
     {
-        foreach (var item in temporaryItems)
-            items.Add(item);
+        foreach (var item in _temporaryItems)
+            _items.Add(item);
 
-        _uiAuctionPreparationScreen.LoadItemsToInventory(items);
+        _uiAuctionPreparationScreen.LoadItemsToInventory(_items);
     }
 
     public void UpdateInventories(List<ItemCardConfig> items, List<ItemCardConfig> auctionItems)
     {
-        this.items = items;
-        this.auctionItems = auctionItems;
+        this._items = items;
+        this._auctionItems = auctionItems;
     }
+
+    #region Exposed
+
+    public int GetTemporaryItemsCount()
+    {
+        return _temporaryItems.Count;
+    }
+
+    public int GetItemsCount()
+    {
+        return _items.Count;
+    }
+
+    public int GetAuctionItemsCount()
+    {
+        return _auctionItems.Count;
+    }
+
+    public bool IsTemporaryItemsInventoryFull()
+    {
+        return _temporaryItems.Count == inventoryConfig.TemporaryInventorySlotCount;
+    }
+
+    public bool IsItemsInventoryFull()
+    {
+        return _items.Count == inventoryConfig.MainInventorySlotCount;
+    }
+
+    public bool IsAuctionItemsInventoryFull()
+    {
+        return _auctionItems.Count == inventoryConfig.AuctionInventorySlotCount;
+    }
+
+    #endregion
 }

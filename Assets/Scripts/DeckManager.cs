@@ -43,7 +43,8 @@ public class DeckManager : MonoBehaviour
 
     public void SpawnCard()
     {
-        if (_cardCounter == 0)
+        //if (_cardCounter == 0)
+        if (_inventoryManager.IsTemporaryItemsInventoryFull())
         {
             CompleteRun();
             return;

@@ -7,6 +7,9 @@ public class InventoryConfig : ScriptableObject
     public float CarryCapacity;
     [Tooltip("As percentage (%)")]
     public float ItemDiscardProbability;
+    [Space(10)]
+    [Header("Inventory Sizes")]
     public int MainInventorySlotCount;
     public int AuctionInventorySlotCount;
+    public int TemporaryInventorySlotCount;
 }
