@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 4218722248547036929}
   - component: {fileID: 4218722248547036928}
   m_Layer: 5
-  m_Name: Price
+  m_Name: Offer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1244,7 +1244,7 @@ GameObject:
   - component: {fileID: 4218722248899692194}
   - component: {fileID: 4218722248899692197}
   m_Layer: 5
-  m_Name: Price Text
+  m_Name: Offer Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2391,9 +2391,9 @@ GameObject:
   - component: {fileID: 4218722250340892216}
   - component: {fileID: 4218722250340892219}
   - component: {fileID: 4218722250340892217}
-  - component: {fileID: 4218722250340892198}
+  - component: {fileID: 9155259661840203336}
   m_Layer: 0
-  m_Name: Item Card
+  m_Name: Auction Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2526,7 +2526,7 @@ MonoBehaviour:
     _usePolygonMap: 0
   wasConverted: 0
   preConvertedScale: {x: 4, y: 6, z: 1}
---- !u!114 &4218722250340892198
+--- !u!114 &9155259661840203336
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2535,7 +2535,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4218722250340892218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc7f3c17063959947851890c1b60a5db, type: 3}
+  m_Script: {fileID: 11500000, guid: 22b2244fb7f5c1f45b96572232f48fdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   frontSide: {fileID: 4218722250388125276}
@@ -2544,10 +2544,8 @@ MonoBehaviour:
   frontSideNameText: {fileID: 4218722248944590179}
   backSideNameText: {fileID: 4218722248863156481}
   _pivotTransform: {fileID: 4218722250397913208}
-  descriptionText: {fileID: 369781985324757668}
-  priceText: {fileID: 4218722248899692197}
-  rarityText: {fileID: 868526768864795429}
-  weightText: {fileID: 4218722249267719953}
+  offerText: {fileID: 0}
+  spriteRenderer: {fileID: 4218722249583678554}
 --- !u!1 &4218722250388125276
 GameObject:
   m_ObjectHideFlags: 0

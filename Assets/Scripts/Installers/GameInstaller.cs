@@ -3,7 +3,8 @@ using Zenject;
 
 public class GameInstaller : MonoInstaller
 {
-    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject itemCardPrefab;
+    [SerializeField] private GameObject auctionCardPrefab;
     [SerializeField] private GameObject inventoryItemPrefab;
 
     public override void InstallBindings()
@@ -34,13 +35,16 @@ public class GameInstaller : MonoInstaller
             .AsSingle();
 
         Container
-           .BindFactory<Card, Card.Factory>()
-           .FromComponentInNewPrefab(cardPrefab);
+           .BindFactory<ItemCard, ItemCard.Factory>()
+           .FromComponentInNewPrefab(itemCardPrefab);
+        
+        Container
+           .BindFactory<AuctionCard, AuctionCard.Factory>()
+           .FromComponentInNewPrefab(auctionCardPrefab);
 
         Container
             .BindFactory<InventoryItem, InventoryItem.Factory>()
             .FromComponentInNewPrefab(inventoryItemPrefab);
-
 
         #region UI
 

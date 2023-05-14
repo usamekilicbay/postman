@@ -15,7 +15,7 @@ public class DeckManager : MonoBehaviour
     private DiContainer _diContainer;
 
     private InventoryManager _inventoryManager;
-    private Card.Factory _cardFactory;
+    private ItemCard.Factory _itemCardFactory;
 
     private UIManagerBase _uiManager;
     private UIHomeScreen _uiHomeScreen;
@@ -23,11 +23,11 @@ public class DeckManager : MonoBehaviour
 
     [Inject]
     public void Construct(DiContainer diContainer,
-        Card.Factory cardFactory)
+        ItemCard.Factory itemCardFactory)
     {
         _diContainer = diContainer;
         _inventoryManager = _diContainer.Resolve<InventoryManager>();
-        _cardFactory = cardFactory;
+        _itemCardFactory = itemCardFactory;
         _uiManager = _diContainer.Resolve<UIManagerBase>();
         _uiHomeScreen = _diContainer.Resolve<UIHomeScreen>();
         _uiGameScreen = _diContainer.Resolve<UIGameScreen>();
@@ -35,7 +35,7 @@ public class DeckManager : MonoBehaviour
 
     #endregion
 
-    private void Awake()
+    public void StartRun()
     {
         _cardCounter = 6;
         SpawnCard();
@@ -50,10 +50,10 @@ public class DeckManager : MonoBehaviour
             return;
         }
 
-        _uiGameScreen.UpdateRemaningCardCountText(_cardCounter);
-        var card = _cardFactory.Create();
+        _uiGameScreen.UpdateRemaningItemCountText(_cardCounter);
+        var card = _itemCardFactory.Create();
         var randomIndex = Random.Range(0, cardConfigs.Count);
-        card.SetConfigs(cardConfigs[randomIndex]);
+        card.SetCardConfigs(cardConfigs[randomIndex]);
 
         _cardCounter--;
     }

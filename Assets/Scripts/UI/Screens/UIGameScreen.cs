@@ -3,7 +3,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using Zenject;
-using static UnityEditor.Progress;
 
 public class UIGameScreen : UIScreenBase
 {
@@ -29,7 +28,7 @@ public class UIGameScreen : UIScreenBase
         moneyText.SetText($"${money}");
     }
 
-    public void UpdateRemaningCardCountText(int remaningCardCount)
+    public void UpdateRemaningItemCountText(int remaningCardCount)
     {
         remaningCardCountText.SetText($"Remaining Cards: {remaningCardCount}");
     }

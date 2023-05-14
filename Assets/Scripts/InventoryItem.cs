@@ -55,6 +55,7 @@ public class InventoryItem : MonoBehaviour
         }
     }
 
+    // TODO: Add Discard button and bind this method to it
     public void DiscardItem()
     {
         switch (PresentInventory)

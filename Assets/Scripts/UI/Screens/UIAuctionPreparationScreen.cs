@@ -21,17 +21,20 @@ public class UIAuctionPreparationScreen : UIScreenBase
     private List<InventoryItem> _inventoryItems = new();
     private List<InventoryItem> _auctionInventoryItems = new();
 
+    private GameManager _gameManager;
     private UIHomeScreen _uiHomeScreen;
     private UIGameScreen _uiGameScreen;
-    private InventoryItem.Factory _inventoryItemFactory;
     private InventoryManager _inventoryManager;
+    private InventoryItem.Factory _inventoryItemFactory;
 
     [Inject]
-    public void Construct(UIHomeScreen homeScreen,
+    public void Construct(GameManager gameManager,
+        UIHomeScreen homeScreen,
         UIGameScreen gameScreen,
         InventoryManager inventoryManager,
         InventoryItem.Factory inventoryItemFactory)
     {
+        _gameManager = gameManager;
         _uiGameScreen = gameScreen;
         _uiHomeScreen = homeScreen;
         _inventoryItemFactory = inventoryItemFactory;
@@ -128,7 +131,7 @@ public class UIAuctionPreparationScreen : UIScreenBase
         var auctionItems = new List<ItemCardConfig>();
         _auctionInventoryItems.ForEach(x => auctionItems.Add(x.ItemConfig));
 
-        _inventoryManager.UpdateInventories(items, auctionItems);
+        _gameManager.StartAuction(items, auctionItems);
 
         uiManager.ShowScreen(_uiGameScreen);
     }

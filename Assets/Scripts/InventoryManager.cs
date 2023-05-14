@@ -66,6 +66,11 @@ public class InventoryManager : MonoBehaviour
         return true;
     }
 
+    public void DiscardItem(ItemCardConfig item)
+    {
+        _auctionItems.Remove(item);
+    }
+
     public void CompleteRun()
     {
         foreach (var item in _temporaryItems)

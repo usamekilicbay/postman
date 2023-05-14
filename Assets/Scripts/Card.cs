@@ -1,52 +1,38 @@
 using DG.Tweening;
-using System;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using Zenject;
 
-public enum Rarity
-{
-    Common,
-    Rare,
-    Epic,
-    Legendary
-}
-
-public class Card : MonoBehaviour
+public abstract class Card : MonoBehaviour
 {
     [SerializeField] private GameObject frontSide;
     [SerializeField] private GameObject backSide;
     [Space(10)]
-    [Header("Front Side")]
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private TextMeshProUGUI frontSideNameText;
-    [Header("Back Side")]
-    [SerializeField] private TextMeshProUGUI backSideNameText;
-    [SerializeField] private TextMeshProUGUI descriptionText;
-    [SerializeField] private TextMeshProUGUI priceText;
-    [SerializeField] private TextMeshProUGUI rarityText;
-    [SerializeField] private TextMeshProUGUI weightText;
-
+    [Header("Front Details")]
+    [SerializeField] protected SpriteRenderer spriteRenderer;
+    [SerializeField] protected TextMeshProUGUI frontSideNameText;
+    [Header("Back Details")]
+    [SerializeField] protected TextMeshProUGUI backSideNameText;
+    [Space(10)]
     [SerializeField] private Transform _pivotTransform;
-
-    private ItemCardConfig _itemCardConfig;
 
     private bool _isBackSideShown;
     private Vector3 _defaultScale;
 
     #region Dependency Injection
 
-    private DeckManager _deckManager;
-    private InventoryManager _inventoryManager;
-    private CurrencyManager _currencyManager;
+    protected DeckManager deckManager;
+    protected AuctionDeckManager auctionDeckManager;
+    protected InventoryManager inventoryManager;
+    protected CurrencyManager currencyManager;
 
     [Inject]
     public void Construct(CardFacade cardFacade)
     {
-        _deckManager = cardFacade.DeckManager;
-        _inventoryManager = cardFacade.InventoryManager;
-        _currencyManager = cardFacade.CurrencyManager;
+        deckManager = cardFacade.DeckManager;
+        auctionDeckManager = cardFacade.AuctionDeckManager;
+        inventoryManager = cardFacade.InventoryManager;
+        currencyManager = cardFacade.CurrencyManager;
     }
 
     #endregion
@@ -68,9 +54,9 @@ public class Card : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
             FlipCard();
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-            CollectCard();
+            SwipeRight();
         else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-            PassCard();
+            SwipeLeft();
     }
 
     #endregion
@@ -109,33 +95,15 @@ public class Card : MonoBehaviour
         transform.DORotate(transform.rotation.eulerAngles + Vector3.up * 90, 0.5f);
     }
 
-    private async Task CollectCard()
+    protected virtual void SwipeRight()
     {
-        var isNotEnoughMoney = !_currencyManager.BuyItem(_itemCardConfig.Price);
-
-        if (isNotEnoughMoney)
-        {
-            Debug.Log("Can not be buyed");
-            return;
-        }
-
-        // TODO: Should I check "IsInventoryFull" here?
-
-        Debug.Log("Collected");
-
-        _inventoryManager.CollectItem(_itemCardConfig);
-        _deckManager.SpawnCard();
-
-        await transform.DOMoveX(5f, 0.5f)
-             .AsyncWaitForKill();
-
         Destroy(gameObject);
     }
 
-    private async void PassCard()
+    private async void SwipeLeft()
     {
         Debug.Log("Passed");
-        _deckManager.SpawnCard();
+        deckManager.SpawnCard();
 
         await transform.DOMoveX(-5f, 0.5f)
              .AsyncWaitForKill();
@@ -151,21 +119,4 @@ public class Card : MonoBehaviour
 
     //    _skierArtTransform.rotation = rotation;
     //}
-
-    public void SetConfigs(ItemCardConfig config)
-    {
-        _itemCardConfig = config;
-
-        spriteRenderer.sprite = config.Artwork;
-        frontSideNameText.SetText(config.Name);
-        backSideNameText.SetText(config.Name);
-        descriptionText.SetText(config.Description);
-        priceText.SetText($"${config.Price}");
-        rarityText.SetText(Enum.GetName(typeof(Rarity), config.Rarity));
-        weightText.SetText(config.Weight.ToString("F1"));
-    }
-
-    public class Factory : PlaceholderFactory<Card>
-    {
-    }
 }
