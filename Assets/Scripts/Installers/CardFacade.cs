@@ -8,11 +8,13 @@ public class CardFacade
     public CurrencyManager CurrencyManager { get; private set; }
 
     [Inject]
-    public void Construct(DeckManager deckManager,
+    public void Construct(DeckManager deckManager, 
+        AuctionDeckManager auctionDeckManager,
         InventoryManager inventoryManager,
         CurrencyManager currencyManager)
     {
         DeckManager = deckManager;
+        AuctionDeckManager = auctionDeckManager;
         InventoryManager = inventoryManager;
         CurrencyManager = currencyManager;
     }

@@ -131,8 +131,13 @@ public class UIAuctionPreparationScreen : UIScreenBase
         var auctionItems = new List<ItemCardConfig>();
         _auctionInventoryItems.ForEach(x => auctionItems.Add(x.ItemConfig));
 
-        _gameManager.StartAuction(items, auctionItems);
+        if (auctionItems.Count == 0)
+        {
+            Debug.Log("You can't start auction without items.");
+            return;
+        }
 
+        _gameManager.StartAuction(items, auctionItems);
         uiManager.ShowScreen(_uiGameScreen);
     }
 }

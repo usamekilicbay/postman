@@ -2544,8 +2544,7 @@ MonoBehaviour:
   frontSideNameText: {fileID: 4218722248944590179}
   backSideNameText: {fileID: 4218722248863156481}
   _pivotTransform: {fileID: 4218722250397913208}
-  offerText: {fileID: 0}
-  spriteRenderer: {fileID: 4218722249583678554}
+  offerText: {fileID: 4218722248899692197}
 --- !u!1 &4218722250388125276
 GameObject:
   m_ObjectHideFlags: 0

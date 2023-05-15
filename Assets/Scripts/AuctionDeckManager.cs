@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 using static UnityEditor.PlayerSettings;
@@ -42,6 +43,14 @@ public class AuctionDeckManager : MonoBehaviour
 
     public void StartNewItemAuction()
     {
+        if (_inventoryManager.GetAuctionItemsCount() == 0)
+        {
+            CompleteRun();
+            return;
+        }
+        
+        _itemOnSale = _inventoryManager.AuctionItems.First();
+
         _offerCounter = 6;
         _lastOffer = 0;
         SpawnCard();
@@ -49,11 +58,7 @@ public class AuctionDeckManager : MonoBehaviour
 
     public void SpawnCard()
     {
-        if (_inventoryManager.GetAuctionItemsCount() == 0)
-        {
-            CompleteRun();
-            return;
-        }
+        
 
         _uiGameScreen.UpdateRemaningItemCountText(_offerCounter);
 

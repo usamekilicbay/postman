@@ -5,14 +5,14 @@ using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-    private UIManager _uiManager;
+    private UIManagerBase _uiManager;
     private InventoryManager _inventoryManager;
     private CurrencyManager _currencyManager;
     private DeckManager _deckManager;
     private AuctionDeckManager _auctionDeckManager;
 
     [Inject]
-    public void Construct(UIManager uiManager,
+    public void Construct(UIManagerBase uiManager,
         InventoryManager inventoryManager,
         CurrencyManager currencyManager,
         DeckManager deckManager,

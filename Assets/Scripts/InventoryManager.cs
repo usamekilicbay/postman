@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +12,11 @@ public class InventoryManager : MonoBehaviour
     private List<ItemCardConfig> _temporaryItems;
     private List<ItemCardConfig> _items;
     private List<ItemCardConfig> _auctionItems;
+
+    public ReadOnlyCollection<ItemCardConfig> Items
+        => _items.AsReadOnly();
+    public ReadOnlyCollection<ItemCardConfig> AuctionItems 
+        => _auctionItems.AsReadOnly();
 
     private UIGameScreen _uiGameScreen;
     private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
@@ -81,8 +87,8 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateInventories(List<ItemCardConfig> items, List<ItemCardConfig> auctionItems)
     {
-        this._items = items;
-        this._auctionItems = auctionItems;
+        _items = items;
+        _auctionItems = auctionItems;
     }
 
     #region Exposed

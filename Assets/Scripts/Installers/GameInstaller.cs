@@ -16,12 +16,22 @@ public class GameInstaller : MonoInstaller
         //   .AsSingle();
 
         Container
+            .Bind<GameManager>()
+            .FromComponentInHierarchy()
+            .AsSingle();
+
+        Container
             .Bind<InventoryManager>()
             .FromComponentInHierarchy()
             .AsSingle();
 
         Container
             .Bind<DeckManager>()
+            .FromComponentInHierarchy()
+            .AsSingle();
+
+        Container
+            .Bind<AuctionDeckManager>()
             .FromComponentInHierarchy()
             .AsSingle();
 

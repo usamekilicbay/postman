@@ -27,7 +27,7 @@ public class UIHomeScreen : UIScreenBase
             .AddListener(StartItemCollectRun);
 
         auctionButton.onClick
-            .AddListener(StartAuctionRun);
+            .AddListener(ShowAuctionPreparationScreen);
     }
 
     private void StartItemCollectRun()
@@ -36,9 +36,8 @@ public class UIHomeScreen : UIScreenBase
         uiManager.ShowScreen(_uiGameScreen);
     }
 
-    private void StartAuctionRun()
+    private void ShowAuctionPreparationScreen()
     {
-        _gameManager.StartAuction();
         uiManager.ShowScreen(_uiAuctionPreparationScreen);
     }
 }
