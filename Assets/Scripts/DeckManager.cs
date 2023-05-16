@@ -4,8 +4,6 @@ using Zenject;
 
 public class DeckManager : MonoBehaviour
 {
-    [SerializeField] private GameObject cardPrefab;
-
     [SerializeField] private List<ItemCardConfig> cardConfigs;
 
     private int _cardCounter;
@@ -14,6 +12,7 @@ public class DeckManager : MonoBehaviour
 
     private DiContainer _diContainer;
 
+    GameManager _gameManager;
     private InventoryManager _inventoryManager;
     private ItemCard.Factory _itemCardFactory;
 
@@ -22,9 +21,11 @@ public class DeckManager : MonoBehaviour
     private UIGameScreen _uiGameScreen;
 
     [Inject]
-    public void Construct(DiContainer diContainer,
+    public void Construct(GameManager gameManager,
+        DiContainer diContainer,
         ItemCard.Factory itemCardFactory)
     {
+        _gameManager = gameManager;
         _diContainer = diContainer;
         _inventoryManager = _diContainer.Resolve<InventoryManager>();
         _itemCardFactory = itemCardFactory;
@@ -60,7 +61,6 @@ public class DeckManager : MonoBehaviour
 
     private void CompleteRun()
     {
-        _inventoryManager.CompleteRun();
-        _uiManager.ShowScreen(_uiHomeScreen);
+        _gameManager.CompleteItemCollect();
     }
 }

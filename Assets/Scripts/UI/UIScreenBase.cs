@@ -15,12 +15,14 @@ public abstract class UIScreenBase : MonoBehaviour
     public virtual Task Show()
     {
         gameObject.SetActive(true);
+        
         return Task.CompletedTask;
     }
 
     public virtual Task Hide()
     {
         gameObject.SetActive(false);
+        
         return Task.CompletedTask;
     }
 }

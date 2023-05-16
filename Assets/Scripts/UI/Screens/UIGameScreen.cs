@@ -1,26 +1,41 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
-public class UIGameScreen : UIScreenBase
+public class UIGameScreen : UIScreenBase, IRenewable
 {
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI remaningCardCountText;
+    [SerializeField] private Button completeRunButton;
     [Space(10)]
     [SerializeField] private GameObject inventorySlotPrefab;
     [SerializeField] private Transform inventorySpawnParent;
 
-    private List<InventorySlot> _inventorySlots = new();
-    private List<InventoryItem> _inventoryItems = new();
+    private readonly List<InventorySlot> _inventorySlots = new();
+    private readonly List<InventoryItem> _inventoryItems = new();
 
+    private GameManager _gameManager;
+    private InventoryManager _inventoryManager;
     private InventoryItem.Factory _inventoryItemFactory;
 
     [Inject]
-    public void Construct(InventoryItem.Factory inventoryItemFactory)
+    public void Construct(GameManager gameManager,
+        InventoryManager inventoryManager,
+        InventoryItem.Factory inventoryItemFactory)
     {
+        _gameManager = gameManager;
+        _inventoryManager = inventoryManager;
         _inventoryItemFactory = inventoryItemFactory;
+    }
+
+    private void Awake()
+    {
+        completeRunButton.onClick
+            .AddListener(_gameManager.CompleteItemCollect);
     }
 
     public void UpdateMoneyText(int money)
@@ -67,5 +82,30 @@ public class UIGameScreen : UIScreenBase
                 .GetComponent<InventorySlot>();
             _inventorySlots.Add(inventorySlot);
         }
+    }
+
+    public override Task Show()
+    {
+        CreateInventorySlots(_inventoryManager.TemporaryInventorySlotCount);
+
+
+        return base.Show();
+    }
+
+    public override Task Hide()
+    {
+        Renew();
+
+        return base.Hide();
+    }
+
+    public void Renew()
+    {
+        moneyText.SetText($"${0}");
+
+        _inventorySlots.ForEach(x => Destroy(x.gameObject));
+        _inventoryItems.ForEach(x => Destroy(x.gameObject));
+        _inventorySlots.Clear();
+        _inventoryItems.Clear();
     }
 }

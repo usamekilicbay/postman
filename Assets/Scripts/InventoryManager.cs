@@ -5,7 +5,7 @@ using Zenject;
 
 public class InventoryManager : MonoBehaviour
 {
-    [SerializeField] InventoryConfig inventoryConfig;
+    [SerializeField] private InventoryConfig inventoryConfig;
 
     private float _burden;
 
@@ -15,8 +15,13 @@ public class InventoryManager : MonoBehaviour
 
     public ReadOnlyCollection<ItemCardConfig> Items
         => _items.AsReadOnly();
-    public ReadOnlyCollection<ItemCardConfig> AuctionItems 
+    public ReadOnlyCollection<ItemCardConfig> AuctionItems
         => _auctionItems.AsReadOnly();
+
+    public int TemporaryInventorySlotCount { get => inventoryConfig.TemporaryInventorySlotCount; }
+    public int MainInventorySlotCount { get => inventoryConfig.MainInventorySlotCount; }
+    public int AuctionInventorySlotCount { get => inventoryConfig.AuctionInventorySlotCount; }
+
 
     private UIGameScreen _uiGameScreen;
     private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
@@ -34,10 +39,6 @@ public class InventoryManager : MonoBehaviour
         _temporaryItems = new List<ItemCardConfig>();
         _items = new List<ItemCardConfig>();
         _auctionItems = new List<ItemCardConfig>();
-
-        _uiGameScreen.CreateInventorySlots(inventoryConfig.TemporaryInventorySlotCount);
-        _uiAuctionPreparationScreen.CreateMainInventorySlots(inventoryConfig.MainInventorySlotCount);
-        _uiAuctionPreparationScreen.CreateAuctionInventorySlots(inventoryConfig.AuctionInventorySlotCount);
     }
 
     public bool CollectItem(ItemCardConfig item)
@@ -77,12 +78,15 @@ public class InventoryManager : MonoBehaviour
         _auctionItems.Remove(item);
     }
 
+    public void StartRun()
+    {
+        //GenerateTemporaryInventorySlots();
+    }
+
     public void CompleteRun()
     {
-        foreach (var item in _temporaryItems)
-            _items.Add(item);
-
-        _uiAuctionPreparationScreen.LoadItemsToInventory(_items);
+        _items.AddRange(_temporaryItems);
+        _temporaryItems.Clear();
     }
 
     public void UpdateInventories(List<ItemCardConfig> items, List<ItemCardConfig> auctionItems)
@@ -90,6 +94,21 @@ public class InventoryManager : MonoBehaviour
         _items = items;
         _auctionItems = auctionItems;
     }
+
+    //private void GenerateTemporaryInventorySlots()
+    //{
+    //    _uiGameScreen.CreateInventorySlots(inventoryConfig.TemporaryInventorySlotCount);
+    //}
+
+    //private void GenerateMainInventorySlots()
+    //{
+    //    _uiAuctionPreparationScreen.CreateMainInventorySlots(inventoryConfig.MainInventorySlotCount);
+    //}
+
+    //private void GenerateAuctionInventorySlots()
+    //{
+    //    _uiAuctionPreparationScreen.CreateAuctionInventorySlots(inventoryConfig.AuctionInventorySlotCount);
+    //}
 
     #region Exposed
 

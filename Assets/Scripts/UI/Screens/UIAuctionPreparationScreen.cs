@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using static UnityEditor.Progress;
 
-public class UIAuctionPreparationScreen : UIScreenBase
+public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
 {
     [SerializeField] private Button homeButton;
     [SerializeField] private Button startAuctionButton;
@@ -22,23 +24,23 @@ public class UIAuctionPreparationScreen : UIScreenBase
     private List<InventoryItem> _auctionInventoryItems = new();
 
     private GameManager _gameManager;
+    private InventoryManager _inventoryManager;
     private UIHomeScreen _uiHomeScreen;
     private UIGameScreen _uiGameScreen;
-    private InventoryManager _inventoryManager;
     private InventoryItem.Factory _inventoryItemFactory;
 
     [Inject]
     public void Construct(GameManager gameManager,
+        InventoryManager inventoryManager,
         UIHomeScreen homeScreen,
         UIGameScreen gameScreen,
-        InventoryManager inventoryManager,
         InventoryItem.Factory inventoryItemFactory)
     {
         _gameManager = gameManager;
+        _inventoryManager = inventoryManager;
         _uiGameScreen = gameScreen;
         _uiHomeScreen = homeScreen;
         _inventoryItemFactory = inventoryItemFactory;
-        _inventoryManager = inventoryManager;
     }
 
     private void Awake()
@@ -139,5 +141,33 @@ public class UIAuctionPreparationScreen : UIScreenBase
 
         _gameManager.StartAuction(items, auctionItems);
         uiManager.ShowScreen(_uiGameScreen);
+    }
+
+    public override Task Show()
+    {
+        CreateMainInventorySlots(_inventoryManager.MainInventorySlotCount);
+        CreateAuctionInventorySlots(_inventoryManager.AuctionInventorySlotCount);
+        LoadItemsToInventory(_inventoryManager.Items);
+
+        return base.Show();
+    }
+
+    public override Task Hide()
+    {
+        Renew();
+
+        return base.Hide();
+    }
+
+    public void Renew()
+    {
+        _inventorySlots.ForEach(x => Destroy(x.gameObject));
+        _inventorySlots.Clear();
+        _auctionInventorySlots.ForEach(x => Destroy(x.gameObject));
+        _auctionInventorySlots.Clear();
+        _inventoryItems.ForEach(x => Destroy(x.gameObject));
+        _inventoryItems.Clear();
+        _auctionInventoryItems.ForEach(x => Destroy(x.gameObject));
+        _auctionInventoryItems.Clear();
     }
 }
