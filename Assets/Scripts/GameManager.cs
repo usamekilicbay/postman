@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private UIManagerBase _uiManager;
     private InventoryManager _inventoryManager;
-    private CurrencyManager _currencyManager;
+    private ICurrencyManager _currencyManager;
     private DeckManager _deckManager;
     private AuctionDeckManager _auctionDeckManager;
     private UIHomeScreen _uiHomeScreen;
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     [Inject]
     public void Construct(UIManagerBase uiManager,
         InventoryManager inventoryManager,
-        CurrencyManager currencyManager,
+        ICurrencyManager currencyManager,
         DeckManager deckManager,
         AuctionDeckManager auctionDeckManager,
         UIHomeScreen uiHomeScreen,
@@ -34,6 +34,13 @@ public class GameManager : MonoBehaviour
         _uiAuctionPreparationScreen = uiAuctionPreparationScreen;
     }
 
+    //TODO: Delete on deploy
+    private void Start()
+    {
+        StartItemCollectRun();
+        _uiManager.ShowScreen(_uiGameScreen);
+    }
+
     public void StartItemCollectRun()
     {
         _deckManager.StartRun();
@@ -42,7 +49,8 @@ public class GameManager : MonoBehaviour
 
     public void CompleteItemCollect()
     {
-        _inventoryManager.CompleteRun();
+        _deckManager.CompleteRun();
+        _inventoryManager.CompleteItemCollectRun();
         _uiManager.ShowScreen(_uiHomeScreen);
     }
 
@@ -54,6 +62,7 @@ public class GameManager : MonoBehaviour
 
     public void CompleteAuction()
     {
-
+        _auctionDeckManager.CompleteRun();
+        _inventoryManager.CompleteAuctionRun();
     }
 }

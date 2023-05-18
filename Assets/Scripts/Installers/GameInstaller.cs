@@ -36,8 +36,8 @@ public class GameInstaller : MonoInstaller
             .AsSingle();
 
         Container
-            .Bind<CurrencyManager>()
-            .FromComponentInHierarchy()
+            .Bind<ICurrencyManager>()
+            .To<CurrencyManager>()
             .AsSingle();
 
         Container

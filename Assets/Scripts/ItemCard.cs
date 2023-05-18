@@ -23,14 +23,16 @@ public class ItemCard : Card
 
     private ItemCardConfig _itemCardConfig;
 
-    protected override async void SwipeRight()
+    protected override void SwipeRight()
     {
-        await CollectItemAsync();
-        
-        base.SwipeRight();
+        if (IsUsed)
+            return;
+
+        IsUsed = true;
+        CollectItem();
     }
 
-    private async Task CollectItemAsync()
+    private void CollectItem()
     {
         var isNotEnoughMoney = !currencyManager.BuyItem(_itemCardConfig.Price);
 
@@ -42,13 +44,13 @@ public class ItemCard : Card
 
         // TODO: Should I check "IsInventoryFull" here?
 
-        Debug.Log("Collected");
+        Debug.Log($"Collected: {_itemCardConfig.Name}");
 
         inventoryManager.CollectItem(_itemCardConfig);
         deckManager.SpawnCard();
 
-        await transform.DOMoveX(5f, 0.5f)
-             .AsyncWaitForKill();
+        transform.DOMoveX(5f, 0.5f)
+            .OnComplete(base.SwipeRight);
     }
 
     public void SetCardConfigs(ItemCardConfig config)

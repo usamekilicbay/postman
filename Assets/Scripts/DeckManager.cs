@@ -7,15 +7,14 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private List<ItemCardConfig> cardConfigs;
 
     private int _cardCounter;
+    private Card _currentCard;
 
     #region Dependency Injection
 
     private DiContainer _diContainer;
-
-    GameManager _gameManager;
+    private GameManager _gameManager;
     private InventoryManager _inventoryManager;
     private ItemCard.Factory _itemCardFactory;
-
     private UIManagerBase _uiManager;
     private UIHomeScreen _uiHomeScreen;
     private UIGameScreen _uiGameScreen;
@@ -47,7 +46,7 @@ public class DeckManager : MonoBehaviour
         //if (_cardCounter == 0)
         if (_inventoryManager.IsTemporaryItemsInventoryFull())
         {
-            CompleteRun();
+            _gameManager.CompleteItemCollect();
             return;
         }
 
@@ -55,12 +54,14 @@ public class DeckManager : MonoBehaviour
         var card = _itemCardFactory.Create();
         var randomIndex = Random.Range(0, cardConfigs.Count);
         card.SetCardConfigs(cardConfigs[randomIndex]);
+        _currentCard = card;
 
         _cardCounter--;
     }
 
-    private void CompleteRun()
+    public void CompleteRun()
     {
-        _gameManager.CompleteItemCollect();
+        if (!_currentCard.IsUsed)
+            Destroy(_currentCard.gameObject);
     }
 }

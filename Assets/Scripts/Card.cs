@@ -7,6 +7,7 @@ public abstract class Card : MonoBehaviour
 {
     [SerializeField] private GameObject frontSide;
     [SerializeField] private GameObject backSide;
+    [SerializeField] private SpriteRenderer cloakRenderer;
     [Space(10)]
     [Header("Front Details")]
     [SerializeField] protected SpriteRenderer spriteRenderer;
@@ -19,12 +20,14 @@ public abstract class Card : MonoBehaviour
     private bool _isBackSideShown;
     private Vector3 _defaultScale;
 
+    public bool IsUsed { get; protected set; }
+
     #region Dependency Injection
 
     protected DeckManager deckManager;
     protected AuctionDeckManager auctionDeckManager;
     protected InventoryManager inventoryManager;
-    protected CurrencyManager currencyManager;
+    protected ICurrencyManager currencyManager;
 
     [Inject]
     public void Construct(CardFacade cardFacade)
@@ -69,6 +72,9 @@ public abstract class Card : MonoBehaviour
         _defaultScale = transform.localScale;
         transform.localScale = _defaultScale * 0.7f;
         transform.DOScale(_defaultScale, 0.5f);
+        var cloakColor = cloakRenderer.color;
+        cloakColor.a = 0;
+        cloakRenderer.color = cloakColor;
     }
 
     private void FlipCard()
@@ -97,18 +103,22 @@ public abstract class Card : MonoBehaviour
 
     protected virtual void SwipeRight()
     {
-        Destroy(gameObject);
+        VanishCard();
     }
 
-    private async void SwipeLeft()
+    private void SwipeLeft()
     {
         Debug.Log("Passed");
         deckManager.SpawnCard();
 
-        await transform.DOMoveX(-5f, 0.5f)
-             .AsyncWaitForKill();
+        transform.DOMoveX(-5f, 0.5f)
+             .OnComplete(VanishCard);
+    }
 
-        Destroy(gameObject);
+    private void VanishCard()
+    {
+        cloakRenderer.DOFade(1, 0.5f)
+            .OnComplete(() => Destroy(gameObject));
     }
 
     //private void LookAtCursor()

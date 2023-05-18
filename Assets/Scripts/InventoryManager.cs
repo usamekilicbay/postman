@@ -83,10 +83,15 @@ public class InventoryManager : MonoBehaviour
         //GenerateTemporaryInventorySlots();
     }
 
-    public void CompleteRun()
+    public void CompleteItemCollectRun()
     {
         _items.AddRange(_temporaryItems);
         _temporaryItems.Clear();
+    }
+
+    public void CompleteAuctionRun()
+    {
+        _auctionItems.Clear();
     }
 
     public void UpdateInventories(List<ItemCardConfig> items, List<ItemCardConfig> auctionItems)
@@ -111,21 +116,6 @@ public class InventoryManager : MonoBehaviour
     //}
 
     #region Exposed
-
-    public int GetTemporaryItemsCount()
-    {
-        return _temporaryItems.Count;
-    }
-
-    public int GetItemsCount()
-    {
-        return _items.Count;
-    }
-
-    public int GetAuctionItemsCount()
-    {
-        return _auctionItems.Count;
-    }
 
     public bool IsTemporaryItemsInventoryFull()
     {

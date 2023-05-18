@@ -50,3 +50,9 @@ TagManager:
   - name: Postman
     uniqueID: 159458323
     locked: 0
+  - name: Card
+    uniqueID: 2788418863
+    locked: 0
+  - name: Cloak
+    uniqueID: 4019523805
+    locked: 0

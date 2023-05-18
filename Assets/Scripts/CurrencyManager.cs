@@ -1,10 +1,10 @@
 using UnityEngine;
 using Zenject;
 
-public class CurrencyManager : MonoBehaviour
+public class CurrencyManager : ICurrencyManager
 {
-    [SerializeField] private int startMoney = 100000;
-
+    private readonly int _startMoney = 100000;
+    
     public static int CurrentMoney { get; private set; }
 
     private UIGameScreen _uiGameScreen;
@@ -13,7 +13,7 @@ public class CurrencyManager : MonoBehaviour
     public void Construct(UIGameScreen uiGameScreen)
     {
         _uiGameScreen = uiGameScreen;
-        CurrentMoney = startMoney;
+        CurrentMoney = _startMoney;
     }
 
     public bool BuyItem(int amount)
@@ -30,13 +30,11 @@ public class CurrencyManager : MonoBehaviour
         return true;
     }
 
-    public bool SellItem(int amount)
+    public void SellItem(int amount)
     {
         Debug.LogWarning($"Item sold for: ${amount}, Owned: ${CurrentMoney}");
 
         CurrentMoney += amount;
         _uiGameScreen.UpdateMoneyText(CurrentMoney);
-
-        return true;
     }
 }

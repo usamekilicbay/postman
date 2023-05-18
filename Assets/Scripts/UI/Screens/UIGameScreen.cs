@@ -86,7 +86,15 @@ public class UIGameScreen : UIScreenBase, IRenewable
 
     public override Task Show()
     {
-        CreateInventorySlots(_inventoryManager.TemporaryInventorySlotCount);
+        var auctionItems = _inventoryManager.AuctionItems;
+
+        if (auctionItems.Any())
+        {
+            CreateInventorySlots(_inventoryManager.AuctionInventorySlotCount);
+            auctionItems.ToList().ForEach(x => AddItemToInventory(x));
+        }
+        else
+            CreateInventorySlots(_inventoryManager.TemporaryInventorySlotCount);
 
 
         return base.Show();
@@ -104,8 +112,8 @@ public class UIGameScreen : UIScreenBase, IRenewable
         moneyText.SetText($"${0}");
 
         _inventorySlots.ForEach(x => Destroy(x.gameObject));
-        _inventoryItems.ForEach(x => Destroy(x.gameObject));
         _inventorySlots.Clear();
+        _inventoryItems.ForEach(x => Destroy(x.gameObject));
         _inventoryItems.Clear();
     }
 }

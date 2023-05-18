@@ -1,8 +1,6 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using Zenject;
-using static UnityEditor.PlayerSettings;
 using Random = UnityEngine.Random;
 
 public class AuctionDeckManager : MonoBehaviour
@@ -16,6 +14,7 @@ public class AuctionDeckManager : MonoBehaviour
 
     #region Dependency Injection
 
+    private GameManager _gameManager;
     private DiContainer _diContainer;
     private InventoryManager _inventoryManager;
     private AuctionCard.Factory _auctionCardFactory;
@@ -23,9 +22,11 @@ public class AuctionDeckManager : MonoBehaviour
     private UIHomeScreen _uiHomeScreen;
     private UIGameScreen _uiGameScreen;
     [Inject]
-    public void Construct(DiContainer diContainer,
+    public void Construct(GameManager gameManager,
+        DiContainer diContainer,
         AuctionCard.Factory auctionCardFactory)
     {
+        _gameManager = gameManager;
         _diContainer = diContainer;
         _inventoryManager = _diContainer.Resolve<InventoryManager>();
         _auctionCardFactory = auctionCardFactory;
@@ -43,12 +44,12 @@ public class AuctionDeckManager : MonoBehaviour
 
     public void StartNewItemAuction()
     {
-        if (_inventoryManager.GetAuctionItemsCount() == 0)
+        if (!_inventoryManager.AuctionItems.Any())
         {
-            CompleteRun();
+            _gameManager.CompleteAuction();
             return;
         }
-        
+
         _itemOnSale = _inventoryManager.AuctionItems.First();
 
         _offerCounter = 6;
@@ -58,8 +59,6 @@ public class AuctionDeckManager : MonoBehaviour
 
     public void SpawnCard()
     {
-        
-
         _uiGameScreen.UpdateRemaningItemCountText(_offerCounter);
 
         //if (_offerCounter == 0)
@@ -76,9 +75,8 @@ public class AuctionDeckManager : MonoBehaviour
         _offerCounter--;
     }
 
-    private void CompleteRun()
+    public void CompleteRun()
     {
-        _inventoryManager.CompleteRun();
-        _uiManager.ShowScreen(_uiHomeScreen);
+        Destroy(_itemOnSale);
     }
 }
