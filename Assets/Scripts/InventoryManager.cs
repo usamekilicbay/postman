@@ -13,6 +13,8 @@ public class InventoryManager : MonoBehaviour
     private List<ItemCardConfig> _items;
     private List<ItemCardConfig> _auctionItems;
 
+    public ReadOnlyCollection<ItemCardConfig> TemporaryItems
+        => _temporaryItems.AsReadOnly();
     public ReadOnlyCollection<ItemCardConfig> Items
         => _items.AsReadOnly();
     public ReadOnlyCollection<ItemCardConfig> AuctionItems
@@ -83,7 +85,7 @@ public class InventoryManager : MonoBehaviour
         //GenerateTemporaryInventorySlots();
     }
 
-    public void CompleteItemCollectRun()
+    public void AddCollectedItemsToInventory()
     {
         _items.AddRange(_temporaryItems);
         _temporaryItems.Clear();
@@ -94,9 +96,18 @@ public class InventoryManager : MonoBehaviour
         _auctionItems.Clear();
     }
 
-    public void UpdateInventories(List<ItemCardConfig> items, List<ItemCardConfig> auctionItems)
+    public void UpdateTemporaryInventory(List<ItemCardConfig> items)
     {
         _items = items;
+    }
+
+    public void UpdateInventory(List<ItemCardConfig> items)
+    {
+        _items = items;
+    }
+
+    public void UpdateAuctionInventory( List<ItemCardConfig> auctionItems)
+    {
         _auctionItems = auctionItems;
     }
 

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private AuctionDeckManager _auctionDeckManager;
     private UIHomeScreen _uiHomeScreen;
     private UIGameScreen _uiGameScreen;
+    private UIGameResultScreen _uiGameResultScreen;
     private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
 
     [Inject]
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
         AuctionDeckManager auctionDeckManager,
         UIHomeScreen uiHomeScreen,
         UIGameScreen uiGameScreen,
+        UIGameResultScreen uiGameResultScreen,
         UIAuctionPreparationScreen uiAuctionPreparationScreen)
     {
         _uiManager = uiManager;
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
         _auctionDeckManager = auctionDeckManager;
         _uiHomeScreen = uiHomeScreen;
         _uiGameScreen = uiGameScreen;
+        _uiGameResultScreen = uiGameResultScreen;
         _uiAuctionPreparationScreen = uiAuctionPreparationScreen;
     }
 
@@ -50,13 +53,13 @@ public class GameManager : MonoBehaviour
     public void CompleteItemCollect()
     {
         _deckManager.CompleteRun();
-        _inventoryManager.CompleteItemCollectRun();
-        _uiManager.ShowScreen(_uiHomeScreen);
+        _uiManager.ShowScreen(_uiGameResultScreen);
     }
 
     public void StartAuction(List<ItemCardConfig> items, List<ItemCardConfig> auctionItems)
     {
-        _inventoryManager.UpdateInventories(items, auctionItems);
+        _inventoryManager.UpdateInventory(items);
+        _inventoryManager.UpdateAuctionInventory(auctionItems);
         _auctionDeckManager.StartRun();
     }
 

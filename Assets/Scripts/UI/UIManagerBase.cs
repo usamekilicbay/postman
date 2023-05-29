@@ -63,5 +63,8 @@ public abstract class UIManagerBase : MonoBehaviour
         await Task.WhenAll(tasks);
         _activeDialogs.Clear();
     }
+
+    public UIScreenBase GetActiveUIScreen()
+        => _activeScreen;
 }
 

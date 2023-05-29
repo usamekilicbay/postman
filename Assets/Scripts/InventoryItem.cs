@@ -6,7 +6,7 @@ public enum PresentInventory
 {
     Main,
     Auction,
-    Temp
+    Temporary
 }
 
 public class InventoryItem : MonoBehaviour
@@ -18,15 +18,21 @@ public class InventoryItem : MonoBehaviour
 
     public ItemCardConfig ItemConfig { get; private set; }
 
-    private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
+    private UIManagerBase _uiManager;
     private UIGameScreen _uiGameScreen;
+    private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
+    private UIGameResultScreen _uiGameResultScreen;
 
     [Inject]
-    public void Construct(UIGameScreen uiGameScreen,
-        UIAuctionPreparationScreen uiAuctionPreparationScreen)
+    public void Construct(UIManagerBase uiManager,
+        UIGameScreen uiGameScreen,
+        UIAuctionPreparationScreen uiAuctionPreparationScreen,
+        UIGameResultScreen uiGameResultScreen)
     {
+        _uiManager = uiManager;
         _uiGameScreen = uiGameScreen;
         _uiAuctionPreparationScreen = uiAuctionPreparationScreen;
+        _uiGameResultScreen = uiGameResultScreen;
     }
 
     private void Awake()
@@ -45,12 +51,16 @@ public class InventoryItem : MonoBehaviour
         switch (PresentInventory)
         {
             case PresentInventory.Main:
-                _uiAuctionPreparationScreen.MoveItemToAuctionInventory(this);
+                if (_uiManager.GetActiveUIScreen() == _uiAuctionPreparationScreen)
+                    _uiAuctionPreparationScreen.MoveItemToAuctionInventory(this);
+                else
+                    _uiGameResultScreen.MoveItemToTemporaryInventory(this);
                 break;
             case PresentInventory.Auction:
-                _uiAuctionPreparationScreen.MoveItemToMainInventory(this);
+                    _uiAuctionPreparationScreen.MoveItemToMainInventory(this);
                 break;
-            case PresentInventory.Temp:
+            case PresentInventory.Temporary:
+                _uiGameResultScreen.MoveItemToMainInventory(this);
                 break;
         }
     }
@@ -65,7 +75,7 @@ public class InventoryItem : MonoBehaviour
                 break;
             case PresentInventory.Auction:
                 break;
-            case PresentInventory.Temp:
+            case PresentInventory.Temporary:
                 _uiGameScreen.DiscardItemFromInventory(this);
                 break;
         }
