@@ -19,21 +19,21 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
 
     private List<InventorySlot> _inventorySlots = new();
     private List<InventorySlot> _temporaryInventorySlots = new();
-    private List<InventoryItem> _inventoryItems = new();
-    private List<InventoryItem> _temporaryInventoryItems = new();
+    private List<UIInventoryItem> _inventoryItems = new();
+    private List<UIInventoryItem> _temporaryUIInventoryItems = new();
 
     private GameManager _gameManager;
     private InventoryManager _inventoryManager;
     private UIHomeScreen _uiHomeScreen;
     private UIGameScreen _uiGameScreen;
-    private InventoryItem.Factory _inventoryItemFactory;
+    private UIInventoryItem.Factory _inventoryItemFactory;
 
     [Inject]
     public void Construct(GameManager gameManager,
         InventoryManager inventoryManager,
         UIHomeScreen homeScreen,
         UIGameScreen gameScreen,
-        InventoryItem.Factory inventoryItemFactory)
+        UIInventoryItem.Factory inventoryItemFactory)
     {
         _gameManager = gameManager;
         _inventoryManager = inventoryManager;
@@ -51,14 +51,14 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
             .AddListener(GoToAuctionPreparationScreen);
     }
 
-    public void LoadItemsToInventory(IReadOnlyList<ItemCardConfig> items)
+    public void LoadItemsToInventory(IReadOnlyList<InventoryItem> items)
     {
         for (var i = 0; i < items.Count; i++)
         {
-            ItemCardConfig item = items[i];
+            InventoryItem item = items[i];
             var inventorySlot = _inventorySlots[i];
             inventorySlot.FillSlot();
-            var inventoryItem = _inventoryItemFactory.Create().GetComponent<InventoryItem>();
+            var inventoryItem = _inventoryItemFactory.Create().GetComponent<UIInventoryItem>();
             inventoryItem.transform.SetParent(inventorySlot.transform, false);
             inventoryItem.SetItem(item);
             inventoryItem.UpdatePresentInventory(PresentInventory.Main);
@@ -66,22 +66,22 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
         }
     }
 
-    public void LoadItemsToTemporaryInventory(IReadOnlyList<ItemCardConfig> items)
+    public void LoadItemsToTemporaryInventory(IReadOnlyList<InventoryItem> items)
     {
         for (var i = 0; i < items.Count; i++)
         {
-            ItemCardConfig item = items[i];
+            InventoryItem item = items[i];
             var inventorySlot = _temporaryInventorySlots[i];
             inventorySlot.FillSlot();
-            var inventoryItem = _inventoryItemFactory.Create().GetComponent<InventoryItem>();
+            var inventoryItem = _inventoryItemFactory.Create().GetComponent<UIInventoryItem>();
             inventoryItem.transform.SetParent(inventorySlot.transform, false);
             inventoryItem.SetItem(item);
             inventoryItem.UpdatePresentInventory(PresentInventory.Temporary);
-            _temporaryInventoryItems.Add(inventoryItem);
+            _temporaryUIInventoryItems.Add(inventoryItem);
         }
     }
 
-    public void MoveItemToTemporaryInventory(InventoryItem inventoryItem)
+    public void MoveItemToTemporaryInventory(UIInventoryItem inventoryItem)
     {
         var mainInventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
         var temporaryInventorySlot = _temporaryInventorySlots.FirstOrDefault(x => !x.IsFull);
@@ -94,16 +94,16 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
         }
 
         inventoryItem.transform.SetParent(temporaryInventorySlot.transform, false);
-        _temporaryInventoryItems.Add(inventoryItem);
+        _temporaryUIInventoryItems.Add(inventoryItem);
         temporaryInventorySlot.FillSlot();
         inventoryItem.UpdatePresentInventory(PresentInventory.Temporary);
         _inventoryItems.Remove(inventoryItem);
         mainInventorySlot.EmptySlot();
     }
 
-    public void MoveItemToMainInventory(InventoryItem inventoryItem)
+    public void MoveItemToMainInventory(UIInventoryItem uiInventoryItem)
     {
-        var acutionInventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
+        var acutionInventorySlot = uiInventoryItem.GetComponentInParent<InventorySlot>();
         var mainInventorySlot = _inventorySlots.First(x => !x.IsFull);
 
         if (mainInventorySlot == null)
@@ -113,15 +113,15 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
             return;
         }
 
-        inventoryItem.transform.SetParent(mainInventorySlot.transform, false);
-        _inventoryItems.Add(inventoryItem);
+        uiInventoryItem.transform.SetParent(mainInventorySlot.transform, false);
+        _inventoryItems.Add(uiInventoryItem);
         mainInventorySlot.FillSlot();
-        inventoryItem.UpdatePresentInventory(PresentInventory.Main);
-        _temporaryInventoryItems.Remove(inventoryItem);
+        uiInventoryItem.UpdatePresentInventory(PresentInventory.Main);
+        _temporaryUIInventoryItems.Remove(uiInventoryItem);
         acutionInventorySlot.EmptySlot();
     }
 
-    public void DiscardItemFromInventory(InventoryItem inventoryItem)
+    public void DiscardItemFromInventory(UIInventoryItem inventoryItem)
     {
         var inventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
         inventorySlot.EmptySlot();
@@ -163,8 +163,8 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
 
     private void UpdateInventories()
     {
-        var items = new List<ItemCardConfig>();
-        _inventoryItems.ForEach(x => items.Add(x.ItemConfig));
+        var items = new List<InventoryItem>();
+        _inventoryItems.ForEach(x => items.Add(x.InventoryItem));
 
         _inventoryManager.UpdateInventory(items);
         _inventoryManager.UpdateTemporaryInventory(new());
@@ -195,7 +195,7 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
         _temporaryInventorySlots.Clear();
         _inventoryItems.ForEach(x => Destroy(x.gameObject));
         _inventoryItems.Clear();
-        _temporaryInventoryItems.ForEach(x => Destroy(x.gameObject));
-        _temporaryInventoryItems.Clear();
+        _temporaryUIInventoryItems.ForEach(x => Destroy(x.gameObject));
+        _temporaryUIInventoryItems.Clear();
     }
 }

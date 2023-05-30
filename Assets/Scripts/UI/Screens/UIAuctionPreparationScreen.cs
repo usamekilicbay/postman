@@ -19,21 +19,21 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
 
     private List<InventorySlot> _inventorySlots = new();
     private List<InventorySlot> _auctionInventorySlots = new();
-    private List<InventoryItem> _inventoryItems = new();
-    private List<InventoryItem> _auctionInventoryItems = new();
+    private List<UIInventoryItem> _inventoryItems = new();
+    private List<UIInventoryItem> _auctionUIInventoryItems = new();
 
     private GameManager _gameManager;
     private InventoryManager _inventoryManager;
     private UIHomeScreen _uiHomeScreen;
     private UIGameScreen _uiGameScreen;
-    private InventoryItem.Factory _inventoryItemFactory;
+    private UIInventoryItem.Factory _inventoryItemFactory;
 
     [Inject]
     public void Construct(GameManager gameManager,
         InventoryManager inventoryManager,
         UIHomeScreen homeScreen,
         UIGameScreen gameScreen,
-        InventoryItem.Factory inventoryItemFactory)
+        UIInventoryItem.Factory inventoryItemFactory)
     {
         _gameManager = gameManager;
         _inventoryManager = inventoryManager;
@@ -51,21 +51,21 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
             .AddListener(StartAuction);
     }
 
-    public void LoadItemsToInventory(IReadOnlyList<ItemCardConfig> items)
+    public void LoadItemsToInventory(IReadOnlyList<InventoryItem> items)
     {
         for (var i = 0; i < items.Count; i++)
         {
-            ItemCardConfig item = items[i];
+            InventoryItem item = items[i];
             var inventorySlot = _inventorySlots[i];
             inventorySlot.FillSlot();
-            var inventoryItem = _inventoryItemFactory.Create().GetComponent<InventoryItem>();
+            var inventoryItem = _inventoryItemFactory.Create().GetComponent<UIInventoryItem>();
             inventoryItem.transform.SetParent(inventorySlot.transform, false);
             inventoryItem.SetItem(item);
             _inventoryItems.Add(inventoryItem);
         }
     }
 
-    public void MoveItemToAuctionInventory(InventoryItem inventoryItem)
+    public void MoveItemToAuctionInventory(UIInventoryItem inventoryItem)
     {
         var mainInventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
         var auctionInventorySlot = _auctionInventorySlots.FirstOrDefault(x => !x.IsFull);
@@ -78,14 +78,14 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
         }
 
         inventoryItem.transform.SetParent(auctionInventorySlot.transform, false);
-        _auctionInventoryItems.Add(inventoryItem);
+        _auctionUIInventoryItems.Add(inventoryItem);
         auctionInventorySlot.FillSlot();
         inventoryItem.UpdatePresentInventory(PresentInventory.Auction);
         _inventoryItems.Remove(inventoryItem);
         mainInventorySlot.EmptySlot();
     }
 
-    public void MoveItemToMainInventory(InventoryItem inventoryItem)
+    public void MoveItemToMainInventory(UIInventoryItem inventoryItem)
     {
         var acutionInventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
         var mainInventorySlot = _inventorySlots.First(x => !x.IsFull);
@@ -93,11 +93,11 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
         _inventoryItems.Add(inventoryItem);
         mainInventorySlot.FillSlot();
         inventoryItem.UpdatePresentInventory(PresentInventory.Main);
-        _auctionInventoryItems.Remove(inventoryItem);
+        _auctionUIInventoryItems.Remove(inventoryItem);
         acutionInventorySlot.EmptySlot();
     }
 
-    public void DiscardItemFromInventory(InventoryItem inventoryItem)
+    public void DiscardItemFromInventory(UIInventoryItem inventoryItem)
     {
         var inventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
         inventorySlot.EmptySlot();
@@ -127,10 +127,10 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
 
     public void StartAuction()
     {
-        var items = new List<ItemCardConfig>();
-        _inventoryItems.ForEach(x => items.Add(x.ItemConfig));
-        var auctionItems = new List<ItemCardConfig>();
-        _auctionInventoryItems.ForEach(x => auctionItems.Add(x.ItemConfig));
+        var items = new List<InventoryItem>();
+        _inventoryItems.ForEach(x => items.Add(x.InventoryItem));
+        var auctionItems = new List<InventoryItem>();
+        _auctionUIInventoryItems.ForEach(x => auctionItems.Add(x.InventoryItem));
 
         if (auctionItems.Count == 0)
         {
@@ -166,7 +166,7 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
         _auctionInventorySlots.Clear();
         _inventoryItems.ForEach(x => Destroy(x.gameObject));
         _inventoryItems.Clear();
-        _auctionInventoryItems.ForEach(x => Destroy(x.gameObject));
-        _auctionInventoryItems.Clear();
+        _auctionUIInventoryItems.ForEach(x => Destroy(x.gameObject));
+        _auctionUIInventoryItems.Clear();
     }
 }

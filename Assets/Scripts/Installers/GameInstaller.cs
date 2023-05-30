@@ -53,7 +53,7 @@ public class GameInstaller : MonoInstaller
            .FromComponentInNewPrefab(auctionCardPrefab);
 
         Container
-            .BindFactory<InventoryItem, InventoryItem.Factory>()
+            .BindFactory<UIInventoryItem, UIInventoryItem.Factory>()
             .FromComponentInNewPrefab(inventoryItemPrefab);
 
         #region UI

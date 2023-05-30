@@ -9,15 +9,15 @@ public class InventoryManager : MonoBehaviour
 
     private float _burden;
 
-    private List<ItemCardConfig> _temporaryItems;
-    private List<ItemCardConfig> _items;
-    private List<ItemCardConfig> _auctionItems;
+    private List<InventoryItem> _temporaryItems;
+    private List<InventoryItem> _items;
+    private List<InventoryItem> _auctionItems;
 
-    public ReadOnlyCollection<ItemCardConfig> TemporaryItems
+    public ReadOnlyCollection<InventoryItem> TemporaryItems
         => _temporaryItems.AsReadOnly();
-    public ReadOnlyCollection<ItemCardConfig> Items
+    public ReadOnlyCollection<InventoryItem> Items
         => _items.AsReadOnly();
-    public ReadOnlyCollection<ItemCardConfig> AuctionItems
+    public ReadOnlyCollection<InventoryItem> AuctionItems
         => _auctionItems.AsReadOnly();
 
     public int TemporaryInventorySlotCount { get => inventoryConfig.TemporaryInventorySlotCount; }
@@ -38,9 +38,9 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        _temporaryItems = new List<ItemCardConfig>();
-        _items = new List<ItemCardConfig>();
-        _auctionItems = new List<ItemCardConfig>();
+        _temporaryItems = new List<InventoryItem>();
+        _items = new List<InventoryItem>();
+        _auctionItems = new List<InventoryItem>();
     }
 
     public bool CollectItem(ItemCardConfig item)
@@ -69,13 +69,15 @@ public class InventoryManager : MonoBehaviour
             return false;
         }
 
+        // TODO: Check if item exist in the inventory if not create new one
+
         _temporaryItems.Add(item);
         _uiGameScreen.AddItemToInventory(item);
-        _burden += item.Weight;
+        _burden += item.GetTotalWeight();
         return true;
     }
 
-    public void DiscardItem(ItemCardConfig item)
+    public void DiscardItem(InventoryItem item)
     {
         _auctionItems.Remove(item);
     }
@@ -96,17 +98,17 @@ public class InventoryManager : MonoBehaviour
         _auctionItems.Clear();
     }
 
-    public void UpdateTemporaryInventory(List<ItemCardConfig> items)
+    public void UpdateTemporaryInventory(List<InventoryItem> items)
+    {
+        _temporaryItems = items;
+    }
+
+    public void UpdateInventory(List<InventoryItem> items)
     {
         _items = items;
     }
 
-    public void UpdateInventory(List<ItemCardConfig> items)
-    {
-        _items = items;
-    }
-
-    public void UpdateAuctionInventory( List<ItemCardConfig> auctionItems)
+    public void UpdateAuctionInventory(List<InventoryItem> auctionItems)
     {
         _auctionItems = auctionItems;
     }

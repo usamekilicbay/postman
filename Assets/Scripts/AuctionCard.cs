@@ -6,7 +6,7 @@ public class AuctionCard : Card
 {
     [SerializeField] private TextMeshProUGUI offerText;
 
-    private ItemCardConfig _item;
+    private InventoryItem _item;
     private int _offer;
 
     protected override void SwipeRight()
@@ -18,7 +18,7 @@ public class AuctionCard : Card
         base.SwipeRight();
     }
 
-    public void SetCardConfigs(ItemCardConfig item, 
+    public void SetCardConfigs(InventoryItem item, 
         string customerName, int offer, Sprite artwork)
     {
         _item = item;

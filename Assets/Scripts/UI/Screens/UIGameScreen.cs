@@ -16,16 +16,16 @@ public class UIGameScreen : UIScreenBase, IRenewable
     [SerializeField] private Transform inventorySpawnParent;
 
     private readonly List<InventorySlot> _inventorySlots = new();
-    private readonly List<InventoryItem> _inventoryItems = new();
+    private readonly List<UIInventoryItem> _inventoryItems = new();
 
     private GameManager _gameManager;
     private InventoryManager _inventoryManager;
-    private InventoryItem.Factory _inventoryItemFactory;
+    private UIInventoryItem.Factory _inventoryItemFactory;
 
     [Inject]
     public void Construct(GameManager gameManager,
         InventoryManager inventoryManager,
-        InventoryItem.Factory inventoryItemFactory)
+        UIInventoryItem.Factory inventoryItemFactory)
     {
         _gameManager = gameManager;
         _inventoryManager = inventoryManager;
@@ -48,7 +48,7 @@ public class UIGameScreen : UIScreenBase, IRenewable
         remaningCardCountText.SetText($"Remaining Cards: {remaningCardCount}");
     }
 
-    public void AddItemToInventory(ItemCardConfig item)
+    public void AddItemToInventory(InventoryItem item)
     {
         var inventorySlot = _inventorySlots.FirstOrDefault(x => !x.IsFull);
 
@@ -60,13 +60,13 @@ public class UIGameScreen : UIScreenBase, IRenewable
         }
 
         inventorySlot.FillSlot();
-        var inventoryItem = _inventoryItemFactory.Create().GetComponent<InventoryItem>();
+        var inventoryItem = _inventoryItemFactory.Create().GetComponent<UIInventoryItem>();
         inventoryItem.transform.SetParent(inventorySlot.transform, false);
         inventoryItem.SetItem(item);
         _inventoryItems.Add(inventoryItem);
     }
 
-    public void DiscardItemFromInventory(InventoryItem inventoryItem)
+    public void DiscardItemFromInventory(UIInventoryItem inventoryItem)
     {
         var inventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
         inventorySlot.EmptySlot();

@@ -1,13 +1,11 @@
-using System;
-using System.Diagnostics;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item Card Config", menuName = "Configs/Item Card Config")]
 public class ItemCardConfig : ScriptableObject
 {
-    public string Id { get; private set; }
+    [SerializeField] private string id;
+    public string Id { get { return id; } }
 
-    public string IdInfo;
     public Sprite Artwork;
     public string Name;
     public string Description;
@@ -15,32 +13,14 @@ public class ItemCardConfig : ScriptableObject
     public Rarity Rarity;
     public float Weight;
 
-    //[SerializeField, HideInInspector] private bool _hasBeenInitialised;  
-    public bool _hasBeenInitialised;  
-
-    [Conditional("UNITY_EDITOR")]
-    private void OnValidate() 
+    private void OnEnable()
     {
-        if (!_hasBeenInitialised)
+        // Generate a new ID when the ScriptableObject is created for the first time
+        if (string.IsNullOrEmpty(id))
         {
-            Id = Guid.NewGuid().ToString();
-            _hasBeenInitialised = true;
+            id = System.Guid.NewGuid().ToString();
+            // Make the ID immutable
+            hideFlags = HideFlags.NotEditable;
         }
-
-        IdInfo = Id;
-    }
-
-
-    [ContextMenu("Reset Config")]
-    public void ResetConfig()
-    {
-        _hasBeenInitialised = false;
-    }
-
-    [ContextMenu("Generate New Id")]
-    public void GenerateNewId()
-    {
-        Id = Guid.NewGuid().ToString();
-        IdInfo = Id;
     }
 }

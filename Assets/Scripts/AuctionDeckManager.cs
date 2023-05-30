@@ -8,7 +8,7 @@ public class AuctionDeckManager : MonoBehaviour
     [SerializeField] Sprite tempCustomerArtwork;
     private int _offerCounter;
     private int _lastOffer;
-    private ItemCardConfig _itemOnSale;
+    private InventoryItem _itemOnSale;
 
     private readonly string[] _customerNames = { "Jayda", "Charlie", "Paige", "Sean", "Kerri", "Milena", "Tomas", "Malorie", "Drake", "Caelan", "Macie", "Gilbert", "Amiah", "Davonte", "Jean", "Luke", "Amanda", "Silvia", "Essence", "Ada", "Devyn", "Lyndsay", "Maleah", "Brady", "Angelina", "Daron", "Amari", "Fatima", "Kayla", "India" };
 
@@ -66,7 +66,7 @@ public class AuctionDeckManager : MonoBehaviour
 
         var randomCustomerNameIndex = Random.Range(0, _customerNames.Length);
         var customerName = _customerNames[randomCustomerNameIndex];
-        var randomOffer = Random.Range(1, Mathf.RoundToInt(_itemOnSale.Price * 0.1f));
+        var randomOffer = Random.Range(1, Mathf.RoundToInt(_itemOnSale.ItemConfig.Price * 0.1f));
         var offer = _lastOffer + randomOffer;
 
         var card = _auctionCardFactory.Create();
