@@ -6,22 +6,22 @@ public class AuctionCard : Card
 {
     [SerializeField] private TextMeshProUGUI offerText;
 
-    private InventoryItem _item;
+    private ItemCardConfig _item;
     private int _offer;
 
     protected override void SwipeRight()
     {
         currencyManager.SellItem(_offer);
-        inventoryManager.DiscardItem(_item);
+        inventoryManager.DiscardAuctionItem(_item);
         auctionDeckManager.StartNewItemAuction();
 
         base.SwipeRight();
     }
 
-    public void SetCardConfigs(InventoryItem item, 
+    public void SetCardConfigs(ItemCardConfig itemConfig, 
         string customerName, int offer, Sprite artwork)
     {
-        _item = item;
+        _item = itemConfig;
         _offer = offer;
 
         spriteRenderer.sprite = artwork;

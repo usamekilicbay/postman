@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -27,13 +28,16 @@ public class InventoryManager : MonoBehaviour
 
     private UIGameScreen _uiGameScreen;
     private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
+    private InventoryItem.Factory _inventoryItemFactory;
 
     [Inject]
     public void Construct(UIGameScreen uiGameScreen,
-        UIAuctionPreparationScreen uiAuctionPreparationScreen)
+        UIAuctionPreparationScreen uiAuctionPreparationScreen,
+        InventoryItem.Factory inventoryItemFactory)
     {
         _uiGameScreen = uiGameScreen;
         _uiAuctionPreparationScreen = uiAuctionPreparationScreen;
+        _inventoryItemFactory = inventoryItemFactory;
     }
 
     private void Start()
@@ -45,40 +49,57 @@ public class InventoryManager : MonoBehaviour
 
     public bool CollectItem(ItemCardConfig item)
     {
+
+        // TODO: If drop probability will be added to the real game, this code has to be activated
+        // and DropRandomItem method must be updated.
         //if (_burden >= inventoryConfig.CarryCapacity
         //    && Random.Range(0f, 1f) < inventoryConfig.ItemDiscardProbability)
         //{
-        //    var selectedItem = ScriptableObject.CreateInstance<ItemCardConfig>();
-
-        //    do
-        //    {
-        //        var randomIndex = Random.Range(0, temporaryItems.Count);
-        //        selectedItem = temporaryItems[randomIndex];
-
-        //    } while (_burden - selectedItem.Weight + item.Weight <= inventoryConfig.CarryCapacity);
-
-        //    temporaryItems.Remove(selectedItem);
+        //    DropRandomItem(item);
 
         //    return false;
         //}
 
-        if (_temporaryItems.Count == inventoryConfig.TemporaryInventorySlotCount)
-        {
-            Debug.Log("Temporary inventory is full, new item can not be collected!");
+        //if (_temporaryItems.Count == inventoryConfig.TemporaryInventorySlotCount)
+        //{
+        //    Debug.Log("Temporary inventory is full, new item can not be collected!");
 
-            return false;
+        //    return false;
+        //}
+
+        if (_burden >= inventoryConfig.CarryCapacity)
+            Debug.LogWarning("Burden has reached the maximum weight, you can not collect more item.");
+
+        var inventoryItem = _temporaryItems.FirstOrDefault(x => x.ItemConfig == item);
+
+        if (inventoryItem == null || inventoryItem.IsStackFull())
+        {
+            inventoryItem = _inventoryItemFactory.Create();
+            inventoryItem.SetInventoryItem(item);
         }
 
-        // TODO: Check if item exist in the inventory if not create new one
+        inventoryItem.AddItemToStack();
+        _temporaryItems.Add(inventoryItem);
+        _uiGameScreen.AddItemToInventory(inventoryItem);
+        _burden += inventoryItem.GetTotalWeight();
 
-        _temporaryItems.Add(item);
-        _uiGameScreen.AddItemToInventory(item);
-        _burden += item.GetTotalWeight();
         return true;
     }
 
-    public void DiscardItem(InventoryItem item)
+    public bool HasEnoughComponentToCraft(string craftComponentId, int amount) 
+        => GetCraftComponentAmountById(craftComponentId) >= amount;
+
+    // TODO: Update this method by reducing amount from another slot if 1 slot is not enough.
+    public void DiscardCraftComponent(string craftComponentId, int craftComponentCount)
     {
+        var item = GetCraftComponentById(craftComponentId);
+
+        item.RemoveItemFromStack(craftComponentCount);
+    }
+
+    public void DiscardAuctionItem(ItemCardConfig itemConfig)
+    {
+        var item = _auctionItems.First(x => x.ItemConfig.Id == itemConfig.Id);
         _auctionItems.Remove(item);
     }
 
@@ -127,6 +148,29 @@ public class InventoryManager : MonoBehaviour
     //{
     //    _uiAuctionPreparationScreen.CreateAuctionInventorySlots(inventoryConfig.AuctionInventorySlotCount);
     //}
+
+    private void DropRandomItem(ItemCardConfig item)
+    {
+        var selectedItem = new InventoryItem();
+
+        do
+        {
+            var randomIndex = Random.Range(0, _temporaryItems.Count);
+            selectedItem = _temporaryItems[randomIndex];
+
+        } while (_burden - selectedItem.ItemConfig.Weight + item.Weight <= inventoryConfig.CarryCapacity);
+
+        _temporaryItems.Remove(selectedItem);
+    }
+
+    private InventoryItem GetCraftComponentById(string craftComponentId)
+       => _items.First(x => x.ItemConfig.Id == craftComponentId);
+
+    private int GetCraftComponentAmountById(string craftComponentId)
+    {
+        return _items.Where(x => x.ItemConfig.Id == craftComponentId)
+            .Sum(x => x.StackCount);
+    }
 
     #region Exposed
 
