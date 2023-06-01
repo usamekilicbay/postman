@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UI.Inventory;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -17,8 +18,8 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
     [SerializeField] private Transform mainInventorySpawnParent;
     [SerializeField] private Transform auctionInventorySpawnParent;
 
-    private List<InventorySlot> _inventorySlots = new();
-    private List<InventorySlot> _auctionInventorySlots = new();
+    private List<UIInventorySlot> _inventorySlots = new();
+    private List<UIInventorySlot> _auctionInventorySlots = new();
     private List<UIInventoryItem> _inventoryItems = new();
     private List<UIInventoryItem> _auctionUIInventoryItems = new();
 
@@ -57,7 +58,7 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
         {
             InventoryItem item = items[i];
             var inventorySlot = _inventorySlots[i];
-            inventorySlot.FillSlot();
+            inventorySlot.AddItem(item);
             var inventoryItem = _inventoryItemFactory.Create().GetComponent<UIInventoryItem>();
             inventoryItem.transform.SetParent(inventorySlot.transform, false);
             inventoryItem.SetItem(item);
@@ -67,8 +68,8 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
 
     public void MoveItemToAuctionInventory(UIInventoryItem inventoryItem)
     {
-        var mainInventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
-        var auctionInventorySlot = _auctionInventorySlots.FirstOrDefault(x => !x.IsFull);
+        var mainInventorySlot = inventoryItem.GetComponentInParent<UIInventorySlot>();
+        var auctionInventorySlot = _auctionInventorySlots.FirstOrDefault(x => x.IsEmpty);
 
         if (auctionInventorySlot == null)
         {
@@ -79,7 +80,7 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
 
         inventoryItem.transform.SetParent(auctionInventorySlot.transform, false);
         _auctionUIInventoryItems.Add(inventoryItem);
-        auctionInventorySlot.FillSlot();
+        auctionInventorySlot.AddItem(inventoryItem);
         inventoryItem.UpdatePresentInventory(PresentInventory.Auction);
         _inventoryItems.Remove(inventoryItem);
         mainInventorySlot.EmptySlot();
@@ -87,8 +88,8 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
 
     public void MoveItemToMainInventory(UIInventoryItem inventoryItem)
     {
-        var acutionInventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
-        var mainInventorySlot = _inventorySlots.First(x => !x.IsFull);
+        var acutionInventorySlot = inventoryItem.GetComponentInParent<UIInventorySlot>();
+        var mainInventorySlot = _inventorySlots.First(x => x.IsEmpty);
         inventoryItem.transform.SetParent(mainInventorySlot.transform, false);
         _inventoryItems.Add(inventoryItem);
         mainInventorySlot.FillSlot();
@@ -99,7 +100,7 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
 
     public void DiscardItemFromInventory(UIInventoryItem inventoryItem)
     {
-        var inventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
+        var inventorySlot = inventoryItem.GetComponentInParent<UIInventorySlot>();
         inventorySlot.EmptySlot();
         _inventoryItems.Remove(inventoryItem);
         Destroy(inventoryItem);
@@ -110,7 +111,7 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
         for (var i = 0; i < inventorySlotCount; i++)
         {
             var inventorySlot = Instantiate(inventorySlotPrefab, mainInventorySpawnParent)
-                .GetComponent<InventorySlot>();
+                .GetComponent<UIInventorySlot>();
             _inventorySlots.Add(inventorySlot);
         }
     }
@@ -120,7 +121,7 @@ public class UIAuctionPreparationScreen : UIScreenBase, IRenewable
         for (var i = 0; i < inventorySlotCount; i++)
         {
             var inventorySlot = Instantiate(inventorySlotPrefab, auctionInventorySpawnParent)
-                .GetComponent<InventorySlot>();
+                .GetComponent<UIInventorySlot>();
             _auctionInventorySlots.Add(inventorySlot);
         }
     }

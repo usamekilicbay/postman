@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UI.Inventory;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -17,8 +18,8 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
     [SerializeField] private Transform mainInventorySpawnParent;
     [SerializeField] private Transform temporaryInventorySpawnParent;
 
-    private List<InventorySlot> _inventorySlots = new();
-    private List<InventorySlot> _temporaryInventorySlots = new();
+    private List<UIInventorySlot> _inventorySlots = new();
+    private List<UIInventorySlot> _temporaryInventorySlots = new();
     private List<UIInventoryItem> _inventoryItems = new();
     private List<UIInventoryItem> _temporaryUIInventoryItems = new();
 
@@ -83,8 +84,8 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
 
     public void MoveItemToTemporaryInventory(UIInventoryItem inventoryItem)
     {
-        var mainInventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
-        var temporaryInventorySlot = _temporaryInventorySlots.FirstOrDefault(x => !x.IsFull);
+        var mainInventorySlot = inventoryItem.GetComponentInParent<UIInventorySlot>();
+        var temporaryInventorySlot = _temporaryInventorySlots.FirstOrDefault(x => x.IsEmpty);
 
         if (temporaryInventorySlot == null)
         {
@@ -103,7 +104,7 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
 
     public void MoveItemToMainInventory(UIInventoryItem uiInventoryItem)
     {
-        var acutionInventorySlot = uiInventoryItem.GetComponentInParent<InventorySlot>();
+        var acutionInventorySlot = uiInventoryItem.GetComponentInParent<UIInventorySlot>();
         var mainInventorySlot = _inventorySlots.First(x => !x.IsFull);
 
         if (mainInventorySlot == null)
@@ -123,7 +124,7 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
 
     public void DiscardItemFromInventory(UIInventoryItem inventoryItem)
     {
-        var inventorySlot = inventoryItem.GetComponentInParent<InventorySlot>();
+        var inventorySlot = inventoryItem.GetComponentInParent<UIInventorySlot>();
         inventorySlot.EmptySlot();
         _inventoryItems.Remove(inventoryItem);
         Destroy(inventoryItem);
@@ -134,7 +135,7 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
         for (var i = 0; i < inventorySlotCount; i++)
         {
             var inventorySlot = Instantiate(inventorySlotPrefab, mainInventorySpawnParent)
-                .GetComponent<InventorySlot>();
+                .GetComponent<UIInventorySlot>();
             _inventorySlots.Add(inventorySlot);
         }
     }
@@ -144,7 +145,7 @@ public class UIGameResultScreen : UIScreenBase, IRenewable
         for (var i = 0; i < inventorySlotCount; i++)
         {
             var inventorySlot = Instantiate(inventorySlotPrefab, temporaryInventorySpawnParent)
-                .GetComponent<InventorySlot>();
+                .GetComponent<UIInventorySlot>();
             _temporaryInventorySlots.Add(inventorySlot);
         }
     }

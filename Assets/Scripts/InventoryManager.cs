@@ -78,7 +78,7 @@ public class InventoryManager : MonoBehaviour
             inventoryItem.SetInventoryItem(item);
         }
 
-        inventoryItem.AddItemToStack();
+        inventoryItem.IncreaseStack();
         _temporaryItems.Add(inventoryItem);
         _uiGameScreen.AddItemToInventory(inventoryItem);
         _burden += inventoryItem.GetTotalWeight();
@@ -94,7 +94,7 @@ public class InventoryManager : MonoBehaviour
     {
         var item = GetCraftComponentById(craftComponentId);
 
-        item.RemoveItemFromStack(craftComponentCount);
+        item.ReduceStack(craftComponentCount);
     }
 
     public void DiscardAuctionItem(ItemCardConfig itemConfig)

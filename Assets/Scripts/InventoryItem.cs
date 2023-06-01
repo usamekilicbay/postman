@@ -23,12 +23,22 @@ public class InventoryItem
     /// </summary>
     /// <param name="amount"></param>
     /// <returns> Remaining amount that can not be added to the stack </returns>
-    public int AddItemToStack(int amount = 1)
+    public int IncreaseStack(int count = 1)
     {
-        var canBeAdded = amount - RemainingSpace();
-        StackCount += canBeAdded;
+        var remainingCount = 0;
 
-        return amount - canBeAdded;
+        if (StackCount + count <= _stackLimit)
+            StackCount += count;
+        else
+        {
+            var availableSpace = _stackLimit - StackCount;
+            StackCount = _stackLimit;
+            remainingCount = count - availableSpace;
+        }
+
+        Debug.LogWarning($"Added {count} items to the stack. Remaining count: {remainingCount}");
+
+        return remainingCount;
     }
 
     // TODO: Fix this method
@@ -40,11 +50,21 @@ public class InventoryItem
     /// </summary>
     /// <param name="amount"></param>
     /// <returns> Remaining amount that can not be added to the stack </returns>
-    public int RemoveItemFromStack(int amount = 1)
+    public int ReduceStack(int count = 1)
     {
-        StackCount--;
+        var remainingCount = 0;
 
-        return 0;
+        if (count >= StackCount)
+        {
+            remainingCount = count - StackCount;
+            StackCount = 0;
+        }
+        else
+            StackCount -= count;
+
+        Debug.LogWarning($"Removed {count} items from the stack. Remaining count: {StackCount}");
+
+        return remainingCount;
     }
 
     public bool IsStackEmpty()

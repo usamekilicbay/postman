@@ -56,10 +56,8 @@ public class GameManager : MonoBehaviour
         _uiManager.ShowScreen(_uiGameResultScreen);
     }
 
-    public void StartAuction(List<InventoryItem> items, List<InventoryItem> auctionItems)
+    public void StartAuction()
     {
-        _inventoryManager.UpdateInventory(items);
-        _inventoryManager.UpdateAuctionInventory(auctionItems);
         _auctionDeckManager.StartRun();
     }
 

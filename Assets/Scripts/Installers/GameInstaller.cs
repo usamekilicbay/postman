@@ -1,3 +1,4 @@
+using UI.Inventory;
 using UnityEngine;
 using Zenject;
 
@@ -43,6 +44,9 @@ public class GameInstaller : MonoInstaller
         Container
             .Bind<CardFacade>()
             .AsSingle();
+
+        Container
+            .BindFactory<InventoryItem, InventoryItem.Factory>();
 
         Container
            .BindFactory<ItemCard, ItemCard.Factory>()
