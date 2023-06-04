@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using Zenject;
 
-namespace Merchant.UI.Inventory
+namespace Merchant.UI.Inventory.Slot
 {
+    [RequireComponent(typeof(RectTransform), typeof(Image))]
     public abstract class UIInventorySlot : MonoBehaviour, IDropHandler
     {
         public bool IsEmpty { get; private set; }
@@ -27,6 +30,11 @@ namespace Merchant.UI.Inventory
         {
             if (eventData.pointerDrag.TryGetComponent<UIInventoryItem>(out var draggedItem))
                 draggedItem.OnEndDrag(eventData);
+        }
+
+        public class Factory : PlaceholderFactory<UIInventorySlot>
+        {
+            ///
         }
     }
 }

@@ -1,9 +1,9 @@
-using Merchant;
 using Merchant.Card;
 using Merchant.Inventory;
 using Merchant.Manager;
 using Merchant.UI.Dialog;
 using Merchant.UI.Inventory;
+using Merchant.UI.Inventory.Slot;
 using Merchant.UI.Screen;
 using UnityEngine;
 using Zenject;
@@ -67,6 +67,10 @@ namespace Merchant.Installer
             Container
                 .BindFactory<UIInventoryItem, UIInventoryItem.Factory>()
                 .FromComponentInNewPrefab(inventoryItemPrefab);
+
+            //Container
+            //    .BindFactory<UIInventorySlot, UIInventorySlot.Factory>()
+            //    .To<>
 
             #region UI
 

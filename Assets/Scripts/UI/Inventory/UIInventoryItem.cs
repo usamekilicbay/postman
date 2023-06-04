@@ -1,5 +1,6 @@
 using Merchant.Inventory;
 using Merchant.Manager;
+using Merchant.UI.Inventory.Slot;
 using Merchant.UI.Screen;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -133,7 +134,7 @@ namespace Merchant.UI.Inventory
 
         public class Factory : PlaceholderFactory<UIInventoryItem>
         {
-
+            ///
         }
     }
 }

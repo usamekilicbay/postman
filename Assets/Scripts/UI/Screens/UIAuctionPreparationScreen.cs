@@ -1,10 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Merchant.Common.Abstract;
 using Merchant.Inventory;
 using Merchant.Manager;
 using Merchant.UI.Inventory;
+using Merchant.UI.Inventory.Slot;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

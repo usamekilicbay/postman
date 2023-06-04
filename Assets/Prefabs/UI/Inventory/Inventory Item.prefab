@@ -221,11 +221,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2299152175784515739}
   - component: {fileID: 2299152175784515740}
+  - component: {fileID: 9034509110010683934}
   - component: {fileID: 2299152175784515738}
   - component: {fileID: 2299152175784515743}
   - component: {fileID: 2299152175784515741}
-  - component: {fileID: 226505327978639209}
   - component: {fileID: 6323404850904409626}
+  - component: {fileID: 7142459293054801487}
   m_Layer: 5
   m_Name: Inventory Item
   m_TagString: Untagged
@@ -248,7 +249,7 @@ RectTransform:
   - {fileID: 2299152174457628783}
   - {fileID: 2299152174758951078}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -263,6 +264,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2299152175784515736}
   m_CullTransparentMesh: 1
+--- !u!114 &9034509110010683934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2299152175784515736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e82d942dd97fb842b61d5dc3723a25e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveItemButton: {fileID: 0}
+  image: {fileID: 2299152174457628782}
 --- !u!114 &2299152175784515738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,20 +391,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &226505327978639209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2299152175784515736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96e0ab81b92d96346ba0459fcf23962c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveItemButton: {fileID: 6323404850904409626}
-  image: {fileID: 2299152174457628782}
 --- !u!114 &6323404850904409626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,3 +435,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!225 &7142459293054801487
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2299152175784515736}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

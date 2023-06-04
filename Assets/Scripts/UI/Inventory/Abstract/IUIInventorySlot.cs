@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Merchant.UI.Inventory.Abstract
+namespace Merchant.UI.Inventory.Abstract.Slot
 {
     public interface IUIInventorySlot
     {
