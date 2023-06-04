@@ -69,7 +69,7 @@ namespace Merchant.UI.Inventory
         public void DiscardItemFromInventory(UIInventoryItem inventoryItem)
         {
             var inventorySlot = inventoryItem.GetComponentInParent<UIInventorySlot>();
-            inventorySlot.EmptySlot();
+            inventorySlot.RemoveItem();
             _uiInventoryItems.Remove(inventoryItem);
             Destroy(inventoryItem);
         }

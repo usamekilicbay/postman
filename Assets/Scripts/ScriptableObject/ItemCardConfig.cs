@@ -12,7 +12,7 @@ namespace Merchant.Config
         private Sprite artwork;
 
         [SerializeField]
-        private string name;
+        private new string name;
 
         [SerializeField]
         private string description;

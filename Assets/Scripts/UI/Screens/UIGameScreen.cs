@@ -75,7 +75,7 @@ namespace Merchant.UI.Screen
         public void DiscardItemFromInventory(UIInventoryItem inventoryItem)
         {
             var inventorySlot = inventoryItem.GetComponentInParent<UIInventorySlot>();
-            inventorySlot.EmptySlot();
+            inventorySlot.RemoveItem();
             _inventoryItems.Remove(inventoryItem);
             Destroy(inventoryItem);
         }

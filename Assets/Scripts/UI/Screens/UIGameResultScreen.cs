@@ -104,7 +104,7 @@ namespace Merchant.UI.Screen
             //temporaryInventorySlot.FillSlot();
             inventoryItem.UpdatePresentInventory(PresentInventory.Temporary);
             _inventoryItems.Remove(inventoryItem);
-            mainInventorySlot.EmptySlot();
+            mainInventorySlot.RemoveItem();
         }
 
         public void MoveItemToMainInventory(UIInventoryItem uiInventoryItem)
@@ -124,13 +124,13 @@ namespace Merchant.UI.Screen
             //mainInventorySlot.FillSlot();
             uiInventoryItem.UpdatePresentInventory(PresentInventory.Main);
             _temporaryUIInventoryItems.Remove(uiInventoryItem);
-            acutionInventorySlot.EmptySlot();
+            acutionInventorySlot.RemoveItem();
         }
 
         public void DiscardItemFromInventory(UIInventoryItem inventoryItem)
         {
             var inventorySlot = inventoryItem.GetComponentInParent<UIInventorySlot>();
-            inventorySlot.EmptySlot();
+            inventorySlot.RemoveItem();
             _inventoryItems.Remove(inventoryItem);
             Destroy(inventoryItem);
         }
