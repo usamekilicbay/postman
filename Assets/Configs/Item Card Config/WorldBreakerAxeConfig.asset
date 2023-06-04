@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca09445b98850eb4095c9f3b3b45e818, type: 3}
-  m_Name: FirstCrownConfig
+  m_Name: WorldBreakerAxeConfig
   m_EditorClassIdentifier: 
-  IdInfo: 
-  Artwork: {fileID: 21300000, guid: 75b5303eb4efdec4ea4b3b5b4fe22155, type: 3}
-  Name: First Crown
-  Description: Fallen King's Crown
-  Price: 678
-  Rarity: 3
-  Weight: 1
-  _hasBeenInitialised: 1
+  Id: 93d3d3e8-69ab-48b3-83ee-4c8e0372b967
+  artwork: {fileID: 21300000, guid: 329b4951f0130e8488f737c9d1000ce1, type: 3}
+  name: Axe
+  description: UU Axe
+  price: 256
+  rarity: 0
+  weight: 3

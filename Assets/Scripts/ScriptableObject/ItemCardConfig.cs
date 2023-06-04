@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Merchant.Config
 {
+    [CreateAssetMenu(fileName = "New Item Card Config", menuName = "Configs/Item Card Config")]
     public class ItemCardConfig : ScriptableObject
     {
         [ReadOnly]
@@ -12,7 +13,7 @@ namespace Merchant.Config
         private Sprite artwork;
 
         [SerializeField]
-        private new string name;
+        private string name;
 
         [SerializeField]
         private string description;
@@ -37,9 +38,7 @@ namespace Merchant.Config
         {
             // Generate a new ID when the ScriptableObject is created for the first time
             if (string.IsNullOrEmpty(Id))
-            {
                 Id = System.Guid.NewGuid().ToString();
-            }
         }
     }
 }

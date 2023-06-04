@@ -11,11 +11,13 @@ namespace Merchant.UI.Inventory.Slot
         public bool IsEmpty { get; private set; }
         public UIInventoryItem CurrentItem { get; private set; }
 
-        public void AddItem(UIInventoryItem item, RectTransform itemRectTransform = default)
+        public void AddItem(UIInventoryItem item)
         {
             CurrentItem = item;
             IsEmpty = false;
             item.transform.SetParent(transform);
+
+            var itemRectTransform = item.GetComponent<RectTransform>();
             itemRectTransform.anchoredPosition = Vector2.zero;
             itemRectTransform.localScale = Vector3.one;
         }

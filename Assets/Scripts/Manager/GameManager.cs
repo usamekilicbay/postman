@@ -1,5 +1,6 @@
 using Merchant.UI.Screen;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Zenject;
 
 namespace Merchant.Manager
@@ -12,6 +13,7 @@ namespace Merchant.Manager
         private DeckManager _deckManager;
         private AuctionDeckManager _auctionDeckManager;
         private UIHomeScreen _uiHomeScreen;
+        private UIInventoryScreen _uiInventoryScreen;
         private UIGameScreen _uiGameScreen;
         private UIGameResultScreen _uiGameResultScreen;
         private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
@@ -24,6 +26,7 @@ namespace Merchant.Manager
             AuctionDeckManager auctionDeckManager,
             UIHomeScreen uiHomeScreen,
             UIGameScreen uiGameScreen,
+            UIInventoryScreen uiInventoryScreen,
             UIGameResultScreen uiGameResultScreen,
             UIAuctionPreparationScreen uiAuctionPreparationScreen)
         {
@@ -34,15 +37,16 @@ namespace Merchant.Manager
             _auctionDeckManager = auctionDeckManager;
             _uiHomeScreen = uiHomeScreen;
             _uiGameScreen = uiGameScreen;
+            _uiInventoryScreen = uiInventoryScreen;
             _uiGameResultScreen = uiGameResultScreen;
             _uiAuctionPreparationScreen = uiAuctionPreparationScreen;
         }
 
-        //TODO: Delete on deploy
+        //TODO: Development purpose
         private void Start()
         {
-            StartItemCollectRun();
-            _uiManager.ShowScreen(_uiGameScreen);
+            //StartItemCollectRun();
+            _uiManager.ShowScreen(_uiInventoryScreen);
         }
 
         public void StartItemCollectRun()

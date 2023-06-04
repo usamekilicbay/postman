@@ -4,6 +4,7 @@ using Merchant.UI.Screen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using Zenject;
 
@@ -15,21 +16,20 @@ namespace Merchant.Manager
 
         private float _burden;
 
-        private List<InventoryItem> _temporaryItems;
         private List<InventoryItem> _items;
+        private List<InventoryItem> _temporaryItems;
         private List<InventoryItem> _auctionItems;
 
-        public ReadOnlyCollection<InventoryItem> TemporaryItems
-            => _temporaryItems.AsReadOnly();
         public ReadOnlyCollection<InventoryItem> Items
             => _items.AsReadOnly();
+        public ReadOnlyCollection<InventoryItem> TemporaryItems
+            => _temporaryItems.AsReadOnly();
         public ReadOnlyCollection<InventoryItem> AuctionItems
             => _auctionItems.AsReadOnly();
 
         public int TemporaryInventorySlotCount { get => inventoryConfig.TemporaryInventorySlotCount; }
         public int MainInventorySlotCount { get => inventoryConfig.MainInventorySlotCount; }
         public int AuctionInventorySlotCount { get => inventoryConfig.AuctionInventorySlotCount; }
-
 
         private UIGameScreen _uiGameScreen;
         private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
@@ -45,11 +45,28 @@ namespace Merchant.Manager
             _inventoryItemFactory = inventoryItemFactory;
         }
 
-        private void Start()
+        private void Awake()
         {
             _temporaryItems = new List<InventoryItem>();
             _items = new List<InventoryItem>();
             _auctionItems = new List<InventoryItem>();
+
+            // Development purpose
+            d_itemCardConfigs.ForEach(x => AddItemToInventory(x));
+        }
+
+        public void AddItemToInventory(ItemCardConfig itemConfig)
+        {
+            var inventoryItem = Items.FirstOrDefault(x => x.ItemConfig == itemConfig);
+
+            if (inventoryItem == null || inventoryItem.IsStackFull())
+            {
+                inventoryItem = _inventoryItemFactory.Create();
+                inventoryItem.SetInventoryItem(itemConfig);
+            }
+
+            inventoryItem.IncreaseStack();
+            _items.Add(inventoryItem);
         }
 
         public bool CollectItem(ItemCardConfig item)
@@ -139,21 +156,6 @@ namespace Merchant.Manager
             _auctionItems = auctionItems;
         }
 
-        //private void GenerateTemporaryInventorySlots()
-        //{
-        //    _uiGameScreen.CreateInventorySlots(inventoryConfig.TemporaryInventorySlotCount);
-        //}
-
-        //private void GenerateMainInventorySlots()
-        //{
-        //    _uiAuctionPreparationScreen.CreateMainInventorySlots(inventoryConfig.MainInventorySlotCount);
-        //}
-
-        //private void GenerateAuctionInventorySlots()
-        //{
-        //    _uiAuctionPreparationScreen.CreateAuctionInventorySlots(inventoryConfig.AuctionInventorySlotCount);
-        //}
-
         private void DropRandomItem(ItemCardConfig item)
         {
             var selectedItem = new InventoryItem();
@@ -179,19 +181,43 @@ namespace Merchant.Manager
 
         #region Exposed
 
-        public bool IsTemporaryItemsInventoryFull()
+        public bool IsTemporaryInventoryFull()
         {
             return _temporaryItems.Count == inventoryConfig.TemporaryInventorySlotCount;
         }
 
-        public bool IsItemsInventoryFull()
+        public bool IsInventoryFull()
         {
             return _items.Count == inventoryConfig.MainInventorySlotCount;
         }
 
-        public bool IsAuctionItemsInventoryFull()
+        public bool IsAuctionInventoryFull()
         {
             return _auctionItems.Count == inventoryConfig.AuctionInventorySlotCount;
+        }
+
+        #endregion
+
+        #region Debug 
+
+        [SerializeField] List<ItemCardConfig> d_itemCardConfigs;
+        private const string d_folderName = "Assets/Configs/Item Card Configs";
+
+        [ContextMenu("Load Item Configs")]
+        public void LoadScriptableObjects()
+        {
+            d_itemCardConfigs.Clear();
+
+            string[] guids = AssetDatabase.FindAssets("t:ItemCardConfig", new string[] { d_folderName });
+
+            foreach (string guid in guids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                ItemCardConfig itemCardConfig = AssetDatabase.LoadAssetAtPath<ItemCardConfig>(assetPath);
+
+                if (itemCardConfig != null)
+                    d_itemCardConfigs.Add(itemCardConfig);
+            }
         }
 
         #endregion

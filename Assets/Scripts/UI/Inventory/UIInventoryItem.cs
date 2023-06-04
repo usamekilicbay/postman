@@ -53,7 +53,7 @@ namespace Merchant.UI.Inventory
             _rectTransform = GetComponent<RectTransform>();
             _canvasGroup = GetComponent<CanvasGroup>();
 
-            moveItemButton.onClick.AddListener(SendItemToInventoryManager);
+            //moveItemButton.onClick.AddListener(SendItemToInventoryManager);
         }
 
         public void SetItem(InventoryItem item)
@@ -128,9 +128,8 @@ namespace Merchant.UI.Inventory
             }
 
             if (eventData.pointerEnter.TryGetComponent<UIInventorySlot>(out var destinationInventorySlot))
-                destinationInventorySlot.AddItem(this, _rectTransform);
+                destinationInventorySlot.AddItem(this);
         }
-
 
         public class Factory : PlaceholderFactory<UIInventoryItem>
         {

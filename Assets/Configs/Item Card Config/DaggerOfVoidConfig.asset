@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca09445b98850eb4095c9f3b3b45e818, type: 3}
-  m_Name: WorldBreakerAxeConfig
+  m_Name: DaggerOfVoidConfig
   m_EditorClassIdentifier: 
-  IdInfo: 
-  Artwork: {fileID: 21300000, guid: 40a8ad6fc063a504986bd3dc5b54eee3, type: 3}
-  Name: World Breaker Axe
-  Description: Mythic Axe of Destruction
-  Price: 442
-  Rarity: 0
-  Weight: 2
-  _hasBeenInitialised: 1
+  Id: 63f9f506-8d13-4c50-aad7-5368bd0583af
+  artwork: {fileID: 21300000, guid: bec1957420d27434e8e3975e34ad8076, type: 3}
+  name: Dagger
+  description: Uu Dagga
+  price: 100
+  rarity: 0
+  weight: 1

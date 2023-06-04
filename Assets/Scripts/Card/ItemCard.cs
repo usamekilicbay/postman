@@ -1,7 +1,6 @@
 using DG.Tweening;
 using Merchant.Config;
 using System;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using Zenject;

@@ -49,7 +49,7 @@ namespace Merchant.Manager
         public void SpawnCard()
         {
             //if (_cardCounter == 0)
-            if (_inventoryManager.IsTemporaryItemsInventoryFull())
+            if (_inventoryManager.IsTemporaryInventoryFull())
             {
                 _gameManager.CompleteItemCollect();
                 return;
