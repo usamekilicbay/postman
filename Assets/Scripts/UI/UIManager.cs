@@ -1,3 +1,6 @@
-public class UIManager : UIManagerBase
+namespace Merchant.Manager
 {
+    public class UIManager : UIManagerBase
+    {
+    }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace UI.Inventory
+namespace Merchant.UI.Inventory
 {
     public class UIInventorySlot : MonoBehaviour, IDropHandler
     {
@@ -14,7 +14,7 @@ namespace UI.Inventory
             IsEmpty = true;
         }
 
-        public void AddItem(UIInventoryItem item, RectTransform itemRectTransform)
+        public void AddItem(UIInventoryItem item, RectTransform itemRectTransform = default)
         {
             CurrentItem = item;
             IsEmpty = false;

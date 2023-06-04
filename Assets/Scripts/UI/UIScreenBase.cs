@@ -1,28 +1,32 @@
+using Merchant.Manager;
 using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
-public abstract class UIScreenBase : MonoBehaviour
+namespace Merchant.UI.Screen
 {
-    protected UIManagerBase uiManager;
-
-    [Inject]
-    public void Construct(UIManagerBase mainSceneUIManager)
+    public abstract class UIScreenBase : MonoBehaviour
     {
-        uiManager = mainSceneUIManager;
-    }
+        protected UIManagerBase uiManager;
 
-    public virtual Task Show()
-    {
-        gameObject.SetActive(true);
-        
-        return Task.CompletedTask;
-    }
+        [Inject]
+        public void Construct(UIManagerBase mainSceneUIManager)
+        {
+            uiManager = mainSceneUIManager;
+        }
 
-    public virtual Task Hide()
-    {
-        gameObject.SetActive(false);
-        
-        return Task.CompletedTask;
+        public virtual Task Show()
+        {
+            gameObject.SetActive(true);
+
+            return Task.CompletedTask;
+        }
+
+        public virtual Task Hide()
+        {
+            gameObject.SetActive(false);
+
+            return Task.CompletedTask;
+        }
     }
 }

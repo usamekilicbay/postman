@@ -1,43 +1,47 @@
+using Merchant.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class UIHomeScreen : UIScreenBase
+namespace Merchant.UI.Screen
 {
-    [SerializeField] private Button startRunButton;
-    [SerializeField] private Button auctionButton;
-
-    private GameManager _gameManager;
-    private UIGameScreen _uiGameScreen;
-    private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
-
-    [Inject]
-    public void Construct(GameManager gameManager,
-        UIGameScreen gameScreen,
-        UIAuctionPreparationScreen auctionPreparationScreen)
+    public class UIHomeScreen : UIScreenBase
     {
-        _gameManager = gameManager;
-        _uiGameScreen = gameScreen;
-        _uiAuctionPreparationScreen = auctionPreparationScreen;
-    }
+        [SerializeField] private Button startRunButton;
+        [SerializeField] private Button auctionButton;
 
-    private void Awake()
-    {
-        startRunButton.onClick
-            .AddListener(StartItemCollectRun);
+        private GameManager _gameManager;
+        private UIGameScreen _uiGameScreen;
+        private UIAuctionPreparationScreen _uiAuctionPreparationScreen;
 
-        auctionButton.onClick
-            .AddListener(ShowAuctionPreparationScreen);
-    }
+        [Inject]
+        public void Construct(GameManager gameManager,
+            UIGameScreen gameScreen,
+            UIAuctionPreparationScreen auctionPreparationScreen)
+        {
+            _gameManager = gameManager;
+            _uiGameScreen = gameScreen;
+            _uiAuctionPreparationScreen = auctionPreparationScreen;
+        }
 
-    private void StartItemCollectRun()
-    {
-        _gameManager.StartItemCollectRun();
-        uiManager.ShowScreen(_uiGameScreen);
-    }
+        private void Awake()
+        {
+            startRunButton.onClick
+                .AddListener(StartItemCollectRun);
 
-    private void ShowAuctionPreparationScreen()
-    {
-        uiManager.ShowScreen(_uiAuctionPreparationScreen);
+            auctionButton.onClick
+                .AddListener(ShowAuctionPreparationScreen);
+        }
+
+        private void StartItemCollectRun()
+        {
+            _gameManager.StartItemCollectRun();
+            uiManager.ShowScreen(_uiGameScreen);
+        }
+
+        private void ShowAuctionPreparationScreen()
+        {
+            uiManager.ShowScreen(_uiAuctionPreparationScreen);
+        }
     }
 }

@@ -1,10 +1,12 @@
-using UI.Inventory;
+using Merchant.Inventory;
+using Merchant.Manager;
+using Merchant.UI.Screen;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Inventory
+namespace Merchant.UI.Inventory
 {
     public enum PresentInventory
     {

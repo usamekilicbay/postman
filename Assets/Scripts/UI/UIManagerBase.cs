@@ -1,70 +1,74 @@
+using Merchant.UI.Dialog;
+using Merchant.UI.Screen;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public abstract class UIManagerBase : MonoBehaviour
+namespace Merchant.Manager
 {
-    [SerializeField] private UIScreenBase firstScreen;
-
-    private UIScreenBase _activeScreen;
-    private List<UIDialogBase> _activeDialogs = new();
-
-    private void Awake()
+    public abstract class UIManagerBase : MonoBehaviour
     {
-        ShowScreen(firstScreen);
-    }
+        [SerializeField] private UIScreenBase firstScreen;
 
-    public async void ShowScreen(UIScreenBase screen)
-    {
-        if (_activeScreen != null)
+        private UIScreenBase _activeScreen;
+        private List<UIDialogBase> _activeDialogs = new();
+
+        private void Awake()
         {
-            await _activeScreen.Hide();
+            ShowScreen(firstScreen);
         }
 
-        await screen.Show();
-        _activeScreen = screen;
-    }
-
-    public async void ShowDialog(UIDialogBase dialog, bool hideRest = true)
-    {
-        if (hideRest)
+        public async void ShowScreen(UIScreenBase screen)
         {
-            await HideAllDialogs();
+            if (_activeScreen != null)
+            {
+                await _activeScreen.Hide();
+            }
+
+            await screen.Show();
+            _activeScreen = screen;
         }
 
-        dialog.transform.SetAsLastSibling();
-        await dialog.Show();
-        _activeDialogs.Add(dialog);
-    }
-
-    public async void HideDialog(UIDialogBase dialog)
-    {
-        await dialog.Hide();
-
-        if (!_activeDialogs.Contains(dialog))
+        public async void ShowDialog(UIDialogBase dialog, bool hideRest = true)
         {
-            Debug.LogWarning($"Dialog {dialog} is not registered as active in {name}", this);
-        }
-        else
-        {
-            _activeDialogs.Remove(dialog);
-        }
-    }
+            if (hideRest)
+            {
+                await HideAllDialogs();
+            }
 
-    public async Task HideAllDialogs()
-    {
-        var tasks = new Task[_activeDialogs.Count];
-
-        for (var i = 0; i < _activeDialogs.Count; i++)
-        {
-            tasks[i] = _activeDialogs[i].Hide();
+            dialog.transform.SetAsLastSibling();
+            await dialog.Show();
+            _activeDialogs.Add(dialog);
         }
 
-        await Task.WhenAll(tasks);
-        _activeDialogs.Clear();
-    }
+        public async void HideDialog(UIDialogBase dialog)
+        {
+            await dialog.Hide();
 
-    public UIScreenBase GetActiveUIScreen()
-        => _activeScreen;
+            if (!_activeDialogs.Contains(dialog))
+            {
+                Debug.LogWarning($"Dialog {dialog} is not registered as active in {name}", this);
+            }
+            else
+            {
+                _activeDialogs.Remove(dialog);
+            }
+        }
+
+        public async Task HideAllDialogs()
+        {
+            var tasks = new Task[_activeDialogs.Count];
+
+            for (var i = 0; i < _activeDialogs.Count; i++)
+            {
+                tasks[i] = _activeDialogs[i].Hide();
+            }
+
+            await Task.WhenAll(tasks);
+            _activeDialogs.Clear();
+        }
+
+        public UIScreenBase GetActiveUIScreen()
+            => _activeScreen;
+    }
 }
-

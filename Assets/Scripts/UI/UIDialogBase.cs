@@ -1,3 +1,4 @@
+using Merchant.Manager;
 using System;
 using System.Threading.Tasks;
 using TMPro;
@@ -5,63 +6,66 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public abstract class UIDialogBase : MonoBehaviour
+namespace Merchant.UI.Dialog
 {
-    [SerializeField] protected TMP_Text messageText;
-    [SerializeField] private Button acceptButton;
-    [SerializeField] private TMP_Text acceptButtonText;
-    [SerializeField] private Button rejectButton;
-    [SerializeField] private TMP_Text rejectButtonText;
-
-    protected UIManagerBase _uiManager;
-    protected Action<bool> _callback;
-
-
-    [Inject]
-    public void Construct(UIManagerBase uiManager)
+    public abstract class UIDialogBase : MonoBehaviour
     {
-        _uiManager = uiManager;
-    }
+        [SerializeField] protected TMP_Text messageText;
+        [SerializeField] private Button acceptButton;
+        [SerializeField] private TMP_Text acceptButtonText;
+        [SerializeField] private Button rejectButton;
+        [SerializeField] private TMP_Text rejectButtonText;
 
-    protected virtual void Awake()
-    {
-        acceptButton.onClick.AddListener(OnAccept);
-        rejectButton.onClick.AddListener(OnReject);
-    }
+        protected UIManagerBase _uiManager;
+        protected Action<bool> _callback;
 
-    public virtual void Setup(string message, string acceptText, string rejectText = "", Action<bool> callback = null)
-    {
-        messageText.text = message;
-        acceptButtonText.text = acceptText;
 
-        rejectButtonText.text = rejectText;
-        rejectButtonText.gameObject.SetActive(!string.IsNullOrEmpty(rejectText));
+        [Inject]
+        public void Construct(UIManagerBase uiManager)
+        {
+            _uiManager = uiManager;
+        }
 
-        _callback = callback;
-    }
+        protected virtual void Awake()
+        {
+            acceptButton.onClick.AddListener(OnAccept);
+            rejectButton.onClick.AddListener(OnReject);
+        }
 
-    public virtual Task Show()
-    {
-        gameObject.SetActive(true);
-        return Task.CompletedTask;
-    }
+        public virtual void Setup(string message, string acceptText, string rejectText = "", Action<bool> callback = null)
+        {
+            messageText.text = message;
+            acceptButtonText.text = acceptText;
 
-    public virtual Task Hide()
-    {
-        gameObject.SetActive(false);
-        _callback = null;
-        return Task.CompletedTask;
-    }
+            rejectButtonText.text = rejectText;
+            rejectButtonText.gameObject.SetActive(!string.IsNullOrEmpty(rejectText));
 
-    protected virtual void OnAccept()
-    {
-        _callback?.Invoke(true);
-        _uiManager.HideDialog(this);
-    }
+            _callback = callback;
+        }
 
-    protected virtual void OnReject()
-    {
-        _callback?.Invoke(false);
-        _uiManager.HideDialog(this);
+        public virtual Task Show()
+        {
+            gameObject.SetActive(true);
+            return Task.CompletedTask;
+        }
+
+        public virtual Task Hide()
+        {
+            gameObject.SetActive(false);
+            _callback = null;
+            return Task.CompletedTask;
+        }
+
+        protected virtual void OnAccept()
+        {
+            _callback?.Invoke(true);
+            _uiManager.HideDialog(this);
+        }
+
+        protected virtual void OnReject()
+        {
+            _callback?.Invoke(false);
+            _uiManager.HideDialog(this);
+        }
     }
 }
