@@ -2,6 +2,7 @@ using Merchant.Inventory;
 using Merchant.Manager;
 using Merchant.UI.Inventory.Slot;
 using Merchant.UI.Screen;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,6 +22,7 @@ namespace Merchant.UI.Inventory
     {
         [SerializeField] private Button moveItemButton;
         [SerializeField] private Image image;
+        [SerializeField] private TextMeshProUGUI stackText;
 
         public UIInventorySlot CurrentSlot { get; private set; }
         public PresentInventory PresentInventory { get; private set; }
@@ -61,6 +63,7 @@ namespace Merchant.UI.Inventory
         {
             InventoryItem = item;
             image.sprite = InventoryItem.ItemConfig.Artwork;
+            stackText.SetText(item.StackCount.ToString());
         }
 
         public void SendItemToInventoryManager()

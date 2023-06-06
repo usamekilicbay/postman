@@ -5759,6 +5759,7 @@ MonoBehaviour:
   inventoryConfig: {fileID: 11400000, guid: 2f894fdcc1287d94bbf3973b27c1b36b, type: 2}
   d_itemCardConfigs:
   - {fileID: 11400000, guid: a68832bb91be1644da0cd2dd5a299865, type: 2}
+  - {fileID: 11400000, guid: 30bb0d0d3f38b2048ad38fabdb7457ac, type: 2}
 --- !u!1 &1089266773
 GameObject:
   m_ObjectHideFlags: 0
