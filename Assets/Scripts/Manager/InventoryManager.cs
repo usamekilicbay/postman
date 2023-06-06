@@ -1,4 +1,5 @@
 using Merchant.Config;
+using Merchant.Config.Item;
 using Merchant.Inventory;
 using Merchant.UI.Screen;
 using System.Collections.Generic;
@@ -64,8 +65,9 @@ namespace Merchant.Manager
                 inventoryItem = _inventoryItemFactory.Create();
                 inventoryItem.SetInventoryItem(itemConfig);
             }
+            else
+                inventoryItem.IncreaseStack();
 
-            inventoryItem.IncreaseStack();
             _items.Add(inventoryItem);
         }
 

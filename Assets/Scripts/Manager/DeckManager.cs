@@ -1,5 +1,5 @@
 using Merchant.Card;
-using Merchant.Config;
+using Merchant.Config.Item;
 using Merchant.UI.Screen;
 using System.Collections.Generic;
 using UnityEngine;

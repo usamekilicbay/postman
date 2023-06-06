@@ -1,3 +1,4 @@
+using Merchant.Config.Item;
 using Merchant.UI.Screen;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -61,15 +62,15 @@ namespace Merchant.Manager
             _uiManager.ShowScreen(_uiGameResultScreen);
         }
 
-        public void StartAuction()
-        {
-            _auctionDeckManager.StartRun();
-        }
+        //public void StartAuction()
+        //{
+        //    _auctionDeckManager.StartRun();
+        //}
 
-        public void CompleteAuction()
-        {
-            _auctionDeckManager.CompleteRun();
-            _inventoryManager.CompleteAuctionRun();
-        }
+        //public void CompleteAuction()
+        //{
+        //    _auctionDeckManager.CompleteRun();
+        //    _inventoryManager.CompleteAuctionRun();
+        //}
     }
 }

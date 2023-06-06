@@ -1,4 +1,4 @@
-using Merchant.Config;
+using Merchant.Config.Item;
 using UnityEngine;
 using Zenject;
 
