@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Merchant.Config;
+using Merchant.Config.Item;
 using System;
 using TMPro;
 using UnityEngine;

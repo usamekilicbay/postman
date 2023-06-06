@@ -108,8 +108,8 @@ namespace Merchant.Card
         {
             VanishCard();
         }
-
-        private void SwipeLeft()
+        
+        protected virtual void SwipeLeft()
         {
             Debug.Log("Passed");
             deckManager.SpawnCard();
