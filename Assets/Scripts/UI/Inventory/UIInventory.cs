@@ -82,6 +82,8 @@ namespace Merchant.UI.Inventory
                 var inventorySlot = Instantiate(inventorySlotPrefab, inventorySpawnParent)
                     .GetComponent<UIInventorySlot>();
                 _inventorySlots.Add(inventorySlot);
+
+                inventorySlot.name = $"Inventory Slot {i}";
             }
         }
 

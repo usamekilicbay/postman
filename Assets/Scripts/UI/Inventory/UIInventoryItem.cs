@@ -22,6 +22,7 @@ namespace Merchant.UI.Inventory
         [SerializeField] private Button moveItemButton;
         [SerializeField] private Image image;
 
+        public UIInventorySlot CurrentSlot { get; private set; }
         public PresentInventory PresentInventory { get; private set; }
 
         public InventoryItem InventoryItem { get; private set; }
@@ -97,6 +98,19 @@ namespace Merchant.UI.Inventory
             }
         }
 
+        public void UpdateSlot(UIInventorySlot slot)
+        {
+            CurrentSlot = slot;
+            transform.SetParent(CurrentSlot.transform);
+            _rectTransform.anchoredPosition = Vector2.zero;
+            _rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            _rectTransform.anchorMin = Vector2.zero;
+            _rectTransform.anchorMax = Vector2.one;
+            _rectTransform.offsetMin = Vector2.zero;
+            _rectTransform.offsetMax = Vector2.zero;
+            _rectTransform.localScale = Vector3.one;
+        }
+
         public void UpdatePresentInventory(PresentInventory presentInventory)
         {
             PresentInventory = presentInventory;
@@ -113,22 +127,58 @@ namespace Merchant.UI.Inventory
         public void OnDrag(PointerEventData eventData)
         {
             _rectTransform.anchoredPosition += eventData.delta / transform.root.localScale.x;
+
+            Debug.Log(eventData.pointerEnter?.name);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             _canvasGroup.blocksRaycasts = true;
 
-            if (eventData.pointerEnter == null)
+            if (eventData.pointerEnter != null)
             {
-                transform.SetParent(_originalParent);
-                _rectTransform.anchoredPosition = Vector2.zero;
+                if (eventData.pointerEnter.TryGetComponent<UIInventoryItem>(out var destinationItem))
+                    SwapItems(destinationItem);
+                else if (eventData.pointerEnter.TryGetComponent<UIInventorySlot>(out var destinationInventorySlot))
+                {
+                    if (destinationInventorySlot == CurrentSlot)
+                    {
+                        Debug.Log("Same slot");
+                        ReturnToCurrentSlot();
+                        return;
+                    }
+
+                    MoveToSlot(destinationInventorySlot);
+                }
 
                 return;
             }
 
-            if (eventData.pointerEnter.TryGetComponent<UIInventorySlot>(out var destinationInventorySlot))
-                destinationInventorySlot.AddItem(this);
+            Debug.Log("Can't drop");
+            ReturnToCurrentSlot();
+        }
+
+        private void SwapItems(UIInventoryItem swappingItem)
+        {
+            Debug.Log("Swap");
+            var destinationSlot = swappingItem.CurrentSlot;
+            CurrentSlot.RemoveItem();
+            destinationSlot.RemoveItem();
+            CurrentSlot.AddItem(swappingItem);
+            destinationSlot.AddItem(this);
+        }
+
+        private void MoveToSlot(UIInventorySlot destinationSlot)
+        {
+            Debug.Log("Move");
+            CurrentSlot.RemoveItem();
+            destinationSlot.AddItem(this);
+        }
+
+        private void ReturnToCurrentSlot()
+        {
+            transform.SetParent(_originalParent);
+            _rectTransform.anchoredPosition = Vector2.zero;
         }
 
         public class Factory : PlaceholderFactory<UIInventoryItem>
