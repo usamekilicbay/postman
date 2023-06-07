@@ -9,7 +9,7 @@ namespace Merchant.Manager
 {
     public class DeckManager : MonoBehaviour
     {
-        [SerializeField] private List<ItemCardConfig> cardConfigs;
+        [SerializeField] private List<ItemConfig> cardConfigs;
 
         private int _cardCounter;
         private CardBase _currentCard;

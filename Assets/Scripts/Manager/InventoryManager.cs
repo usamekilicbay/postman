@@ -56,7 +56,7 @@ namespace Merchant.Manager
             d_itemCardConfigs.ForEach(x => AddItemToInventory(x));
         }
 
-        public void AddItemToInventory(ItemCardConfig itemConfig)
+        public void AddItemToInventory(ItemConfig itemConfig)
         {
             var inventoryItem = Items.FirstOrDefault(x => x.ItemConfig == itemConfig);
 
@@ -71,7 +71,7 @@ namespace Merchant.Manager
             _items.Add(inventoryItem);
         }
 
-        public bool CollectItem(ItemCardConfig item)
+        public bool CollectItem(ItemConfig item)
         {
 
             // TODO: If drop probability will be added to the real game, this code has to be activated
@@ -121,7 +121,7 @@ namespace Merchant.Manager
             item.ReduceStack(craftComponentCount);
         }
 
-        public void DiscardAuctionItem(ItemCardConfig itemConfig)
+        public void DiscardAuctionItem(ItemConfig itemConfig)
         {
             var item = _auctionItems.First(x => x.ItemConfig.Id == itemConfig.Id);
             _auctionItems.Remove(item);
@@ -158,7 +158,7 @@ namespace Merchant.Manager
             _auctionItems = auctionItems;
         }
 
-        private void DropRandomItem(ItemCardConfig item)
+        private void DropRandomItem(ItemConfig item)
         {
             var selectedItem = new InventoryItem();
 
@@ -202,7 +202,7 @@ namespace Merchant.Manager
 
         #region Debug 
 
-        [SerializeField] List<ItemCardConfig> d_itemCardConfigs;
+        [SerializeField] List<ItemConfig> d_itemCardConfigs;
         private const string d_folderName = "Assets/Configs/Item Card Configs";
 
         [ContextMenu("Load Item Configs")]
@@ -215,7 +215,7 @@ namespace Merchant.Manager
             foreach (string guid in guids)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                ItemCardConfig itemCardConfig = AssetDatabase.LoadAssetAtPath<ItemCardConfig>(assetPath);
+                ItemConfig itemCardConfig = AssetDatabase.LoadAssetAtPath<ItemConfig>(assetPath);
 
                 if (itemCardConfig != null)
                     d_itemCardConfigs.Add(itemCardConfig);

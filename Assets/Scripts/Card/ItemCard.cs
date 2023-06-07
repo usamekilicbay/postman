@@ -1,5 +1,5 @@
 using DG.Tweening;
-using Merchant.Config;
+using Merchant.Common.Types;
 using Merchant.Config.Item;
 using System;
 using TMPro;
@@ -8,14 +8,6 @@ using Zenject;
 
 namespace Merchant.Card
 {
-    public enum Rarity
-    {
-        Common,
-        Rare,
-        Epic,
-        Legendary
-    }
-
     public class ItemCard : CardBase
     {
         [Header("Back Details")]
@@ -24,7 +16,7 @@ namespace Merchant.Card
         [SerializeField] private TextMeshProUGUI rarityText;
         [SerializeField] private TextMeshProUGUI weightText;
 
-        private ItemCardConfig _itemCardConfig;
+        private ItemConfig _itemCardConfig;
 
         protected override void SwipeRight()
         {
@@ -56,7 +48,7 @@ namespace Merchant.Card
                 .OnComplete(base.SwipeRight);
         }
 
-        public void SetCardConfigs(ItemCardConfig config)
+        public void SetCardConfigs(ItemConfig config)
         {
             _itemCardConfig = config;
 

@@ -6,12 +6,12 @@ namespace Merchant.Inventory
 {
     public class InventoryItem
     {
-        public ItemCardConfig ItemConfig { get; private set; }
+        public ItemConfig ItemConfig { get; private set; }
         public int StackCount { get; private set; }
 
         const int _stackLimit = 3;
 
-        public void SetInventoryItem(ItemCardConfig itemConfig)
+        public void SetInventoryItem(ItemConfig itemConfig)
         {
             ItemConfig = itemConfig;
             StackCount = 1;

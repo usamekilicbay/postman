@@ -1,6 +1,6 @@
-using UnityEngine;
+using Merchant.Common.Types;
 using System.Collections.Generic;
-using Merchant.Card;
+using UnityEngine;
 
 namespace Merchant.Config.Item
 {
@@ -30,10 +30,10 @@ namespace Merchant.Config.Item
         protected bool[] acquireMethods;
 
         [SerializeField, Header("Curse List")]
-        protected Dictionary<int, string> curseList;
+        protected List<string> curseList;
 
         [SerializeField, Header("Bless List")]
-        protected Dictionary<int, string> blessList;
+        protected List<string> blessList;
 
         [SerializeField, Range(0f, 100f), Header("Curse Possibility")]
         protected float cursePossibility;
@@ -55,8 +55,8 @@ namespace Merchant.Config.Item
         public int Value => value;
         public int Price => price;
         public bool[] AcquireMethods => acquireMethods;
-        public Dictionary<int, string> CurseList => curseList;
-        public Dictionary<int, string> BlessList => blessList;
+        public List<string> CurseList => curseList;
+        public List<string> BlessList => blessList;
         public float CursePossibility => cursePossibility;
         public float BlessPossibility => blessPossibility;
         public float EncounterPossibility => encounterPossibility;
