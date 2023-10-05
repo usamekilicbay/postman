@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f19db811e24591047845c0dc7e66cd43, type: 3}
-  m_Name: New CraftComponent Config
+  m_Name: SS
   m_EditorClassIdentifier: 
-  _id: 
+  _id: 89f72a12-221d-428b-bf85-b514cdbc838d
   artwork: {fileID: 0}
-  name: FF
+  name: SS
   description: 
   weight: 0
   value: 0
   price: 0
-  acquireMethods: 
+  acquireMethods: 01
   curseList: []
   blessList: []
   cursePossibility: 0
   blessPossibility: 0
   encounterPossibility: 0
   rarity: 0
-  requirerRecipes: []
+  requirerRecipes:
+  - {fileID: 0}
